@@ -4,7 +4,7 @@ global.Fs = require("fs");
 
 global.Utility = require("./utility.js");
 global.Config = JSON.parse(Fs.readFileSync("config.json"))
-var commands = Utility.getCommands();
+global.Commands = Utility.getCommands();
 
 global.Bot = new Discord.Client();
 Bot.login(Config.token);
@@ -22,7 +22,7 @@ Bot.on("message", message => {
 
 	console.log(command, args);
 
-	let cmd = commands[command];
+	let cmd = Commands[command];
 
 	if(cmd){
 		if(args.h || args.help){

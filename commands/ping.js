@@ -2,6 +2,7 @@ module.exports = {
 	name: "ping",
 	triggers: ["ping"],
 	description: "Gives bot ping and uptime.",
+	category: "general",
 	arguments: {
 		positional: [],
 		args: []

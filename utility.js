@@ -40,9 +40,7 @@ module.exports.getHelp = function(cmd){
 	for(a of cmd.arguments.args){
 		args.push("\n		-" + a.short + " --" + a.long)
 	}
-
-	return`${capitalise(cmd.name)}:
-${cmd.description}
+	return `${capitalise(cmd.name)}: ${cmd.description}
 	Triggers: ${cmd.triggers.join(", ")}
 	Arguments: ${cmd.arguments.positional.join(", ")} ${args.join("")}`;
 }
