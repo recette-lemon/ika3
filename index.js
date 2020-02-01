@@ -1,12 +1,12 @@
-var Discord = require("discord.js");
-var Minimist = require("minimist");
-var Fs = require("fs");
+global.Discord = require("discord.js");
+global.Minimist = require("minimist");
+global.Fs = require("fs");
 
-var Utility = require("./utility.js");
-var Config = JSON.parse(Fs.readFileSync("config.json"))
+global.Utility = require("./utility.js");
+global.Config = JSON.parse(Fs.readFileSync("config.json"))
 var commands = Utility.getCommands();
 
-var Bot = new Discord.Client();
+global.Bot = new Discord.Client();
 Bot.login(Config.token);
 
 Bot.on("ready", () => {
@@ -37,6 +37,7 @@ Bot.on("message", message => {
 			let embed = new Discord.RichEmbed({
 				title: "Whoops.",
 				description: "Got an error...",
+				color: Config.embedColour,
 				thumbnail: {
 					url: "https://i.imgur.com/GuIhCoQ.png"
 				}
