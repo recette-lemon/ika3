@@ -11,5 +11,5 @@ module.exports = {
 };
 
 function func(message, args){
-	Utility.imageCommandTemplate(message, "ika");
+	Utility.imageCommand(message, "ika");
 }
