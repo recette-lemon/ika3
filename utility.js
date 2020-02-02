@@ -56,7 +56,7 @@ module.exports.getImageLists = function(){
 	return images;
 }
 
-module.exports.imageCommandTemplate = function(message, folder){
+module.exports.imageCommand = function(message, folder){
 	let file = images[folder][Math.floor(Math.random() * images[folder].length)];
 
 	let embed = new Discord.RichEmbed({
@@ -70,6 +70,5 @@ module.exports.imageCommandTemplate = function(message, folder){
 			attachment: "./images/" + folder + "/" + file,
 			name: file
 		}]
-	})
-
+	});
 }
