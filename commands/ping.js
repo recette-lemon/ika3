@@ -22,6 +22,6 @@ function func(message){
 	embed.addField("Ping", Bot.ping + "ms");
 	embed.addField("Uptime", Utility.toHHMMSS(process.uptime()));
 
-	message.reply({embed});
+	message.channel.send({embed});
 
 }

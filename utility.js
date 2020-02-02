@@ -35,7 +35,6 @@ module.exports.getCommands = function(){
 }
 
 module.exports.getHelp = function(cmd){
-
 	let args = [];
 	for(a of cmd.arguments.args){
 		args.push("\n		-" + a.short + " --" + a.long)
