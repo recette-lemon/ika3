@@ -61,6 +61,6 @@ function func(message, args){
 		embed.addField('Misc', "Miscellaneous commands.");
 		break;
 	}
-	message.reply({embed});
+	message.channel.send({embed});
 	for(cmd in Commands) console.log(Commands[cmd]);
 }
