@@ -43,3 +43,33 @@ module.exports.getHelp = function(cmd){
 	Triggers: ${cmd.triggers.join(", ")}
 	Arguments: ${cmd.arguments.positional.join(", ")} ${args.join("")}`;
 }
+
+module.exports.getImageLists = function(){
+	let images = {}
+		folders = Fs.readdirSync("./images");
+
+	for(let folder of folders){
+		let files = Fs.readdirSync("./images/" + folder);
+		images[folder] = files;
+	}
+
+	return images;
+}
+
+module.exports.imageCommandTemplate = function(message, folder){
+	let file = images[folder][Math.floor(Math.random() * images[folder].length)];
+
+	let embed = new Discord.RichEmbed({
+		color: Config.embedColour,
+		image: {url: "attachment://" + file}
+	});
+
+	message.channel.send({
+		embed,
+		files: [{
+			attachment: "./images/" + folder + "/" + file,
+			name: file
+		}]
+	})
+
+}

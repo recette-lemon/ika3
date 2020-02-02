@@ -9,6 +9,8 @@ global.Commands = Utility.getCommands();
 global.Bot = new Discord.Client();
 Bot.login(Config.token);
 
+global.images = Utility.getImageLists();
+
 Bot.on("ready", () => {
 	console.log("ready");
 });
