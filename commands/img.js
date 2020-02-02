@@ -4,7 +4,7 @@ module.exports = {
 	description: "Image search using Searx.Me.",
 	category: "image",
 	arguments: {
-		positional: [],
+		positional: ["terms"],
 		args: []
 	},
 	func: func
@@ -75,8 +75,6 @@ function func(message, args){
 						} else {
 							return;
 						}
-
-						console.log(imgs[index])
 
 						embed.image.url = imgs[index][0];
 						embed.title = imgs[index][1];
