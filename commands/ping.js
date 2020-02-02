@@ -17,6 +17,9 @@ function func(message){
 			url: "https://i.imgur.com/gv4Itmg.png"
 		},
 		color: Config.embedColour,
+		footer: {
+			text: "Feeling good with " + Object.values(Commands).filter((v, i, s) => {return s.indexOf(v) == i}).length + " commands loaded."
+		}
 	});
 
 	embed.addField("Ping", Bot.ping + "ms");
