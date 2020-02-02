@@ -11,23 +11,23 @@ module.exports = {
 };
 
 function func(message, args){
-
 	let embed = new Discord.RichEmbed({
 		color: Config.embedColour,
 		footer: {
-		    text: message.author.tag,
-		    icon_url: message.author.avatarURL
+			text: message.author.tag,
+			icon_url: message.author.avatarURL
 		}
 	});
+
 	let mes = args._.join(" ").split("`").join("").split("\n")[0];
 	if(mes.length > 250) mes = mes.slice(0, 250) + '...';
 	if(message.attachments.first()) embed.setImage(message.attachments.first().url);
 	if(message.content.toLowerCase().split(" ")[0] == (Config.trigger + "reroll")){
-	    embed.setTitle("Reroll it!");
-	    if(mes) embed.addField("Rerolling for", mes);
+		embed.setTitle("Reroll it!");
+		if(mes) embed.addField("Rerolling for", mes);
 	} else {
-	    embed.setTitle("Roll it!");
-	    if(mes) embed.addField("Rolling for", mes);
+		embed.setTitle("Roll it!");
+		if(mes) embed.addField("Rolling for", mes);
 	}
 
 	let roll = (Math.floor(Math.random() * 999999999) + 1);
