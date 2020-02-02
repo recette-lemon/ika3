@@ -18,11 +18,11 @@ function func(message, args){
 	if(!args._[0]) user = message.author;
 	if(!user) return message.reply("User not found.");
 	if(args._[0] == "server"){
-	    if(!message.guild) return message.reply("No guild.");
-	    aviurl = message.guild.iconURL;
+		if(!message.guild) return message.reply("No guild.");
+		aviurl = message.guild.iconURL;
 	} else {
-	    aviurl = user.avatarURL;
-	    if(!aviurl) return message.reply("No avatar.");
+		aviurl = user.avatarURL;
+		if(!aviurl) return message.reply("No avatar.");
 	}
 	let embed = new Discord.RichEmbed({
 		color: Config.embedColour,

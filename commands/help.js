@@ -21,38 +21,38 @@ function func(message, args){
 		description: "Run `" + Config.trigger + "help <section>` to get each category of commands",
 	});
 	switch(section){
-	    case "general":
+		case "general":
 		for(cmd in Commands){
-		    if(Commands[cmd].category == "general") embed.addField(cmd, Commands[cmd].description);
+			if(Commands[cmd].category == "general") embed.addField(cmd, Commands[cmd].description);
 		}
 		break;
-	    case "lewd":
+		case "lewd":
 		for(cmd in Commands){
-		    if(Commands[cmd].category == "lewd") embed.addField(cmd, Commands[cmd].description);
+			if(Commands[cmd].category == "lewd") embed.addField(cmd, Commands[cmd].description);
 		}
 		break;
-	    case "meme":
+		case "meme":
 		for(cmd in Commands){
-		    if(Commands[cmd].category == "meme") embed.addField(cmd, Commands[cmd].description);
+			if(Commands[cmd].category == "meme") embed.addField(cmd, Commands[cmd].description);
 		}
 		break;
-	    case "music":
+		case "music":
 		for(cmd in Commands){
-		    if(Commands[cmd].category == "music") embed.addField(cmd, Commands[cmd].description);
+			if(Commands[cmd].category == "music") embed.addField(cmd, Commands[cmd].description);
 		}
 		break;
-	    case "image":
+		case "image":
 		for(cmd in Commands){
-		    if(Commands[cmd].category == "image") embed.addField(cmd, Commands[cmd].description);
+			if(Commands[cmd].category == "image") embed.addField(cmd, Commands[cmd].description);
 		}
 		break;
-	    case "misc":
+		case "misc":
 		for(cmd in Commands){
-		    if(Commands[cmd].category == "misc") embed.addField(cmd, Commands[cmd].description);
+			if(Commands[cmd].category == "misc") embed.addField(cmd, Commands[cmd].description);
 		}
 		break;
-	    default:
-	    case undefined:
+		default:
+		case undefined:
 		embed.addField('General', "Just general commands.");
 		embed.addField('Lewd', 'Hot, sexy, anime people.');
 		embed.addField('Meme', "Meme and joke commands.");
