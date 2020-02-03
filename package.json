@@ -1,7 +1,7 @@
 {
-  "name": "ika3",
+  "name": "Ika3",
   "version": "3.0.0",
-  "description": "ika musume discord bot v-3",
+  "description": "v3 of the Ika Discord bot, built for the DMC Discord server.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -13,14 +13,15 @@
   "keywords": [
     "ika",
     "discord",
-    "discord-bot"
+    "discord-bot",
+    "discord.js"
   ],
-  "author": "eiko",
+  "author": "recette lemonweed",
   "license": "GPL-3.0-or-later",
   "bugs": {
     "url": "https://gitlab.com/recette_lemonweed/ika3/issues"
   },
-  "homepage": "https://gitlab.com/recette_lemonweed/ika3#readme",
+  "homepage": "https://gitlab.com/recette_lemonweed/ika3",
   "dependencies": {
     "discord.js": "^11.5.1",
     "minimist": "^1.2.0",
