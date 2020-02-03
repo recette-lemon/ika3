@@ -1,4 +1,5 @@
-var Fs = require("fs");
+const Fs = require("fs");
+const Request = require("request");
 
 function capitalise(str){
 	return str[0].toUpperCase() + str.slice(1);
@@ -37,7 +38,7 @@ module.exports.getCommands = function(){
 module.exports.getHelp = function(cmd){
 	let args = [];
 	for(a of cmd.arguments.args){
-		args.push("\n		-" + a.short + " --" + a.long)
+		args.push("\n		-"+a.short+" --"+a.long)
 	}
 	return `${capitalise(cmd.name)}: ${cmd.description}
 	Triggers: ${cmd.triggers.join(", ")}
@@ -49,7 +50,7 @@ module.exports.getImageLists = function(){
 		folders = Fs.readdirSync("./images");
 
 	for(let folder of folders){
-		let files = Fs.readdirSync("./images/" + folder);
+		let files = Fs.readdirSync("./images/"+folder);
 		images[folder] = files;
 	}
 
@@ -61,14 +62,36 @@ module.exports.imageCommand = function(message, folder){
 
 	let embed = new Discord.RichEmbed({
 		color: Config.embedColour,
-		image: {url: "attachment://" + file}
+		image: {url: "attachment://"+file}
 	});
 
 	message.channel.send({
 		embed,
 		files: [{
-			attachment: "./images/" + folder + "/" + file,
+			attachment: "./images/"+folder+"/"+file,
 			name: file
 		}]
+	});
+}
+
+module.exports.searchYT = function(terms, callback){ // yt functions can be extended in the future with more params and asking for more things
+	var url = "https://invidio.us/api/v1/search?fields=type,title,videoId,author,description&q="+encodeURIComponent(terms);
+
+	Request.get(url, (err, res, bod) => {
+		if(err || !bod)
+			throw("nope");
+
+		callback(JSON.parse(bod));
+	});
+}
+
+module.exports.getYTVideoInfo = function(id, callback){
+	var url = "https://invidio.us/api/v1/videos/"+id+"?fields=adaptiveFormats,title,description";
+
+	Request.get(url, (err, res, bod) => {
+		if(err || !bod)
+			throw("nope");
+
+		callback(JSON.parse(bod));
 	});
 }
