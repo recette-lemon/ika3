@@ -85,8 +85,8 @@ module.exports.searchYT = function(terms, callback){ // yt functions can be exte
 	});
 }
 
-module.exports.getYTVideoInfo = function(id, callback){
-	var url = "https://invidio.us/api/v1/videos/"+id+"?fields=adaptiveFormats,title,description";
+module.exports.getYTVideoInfo = function(id, callback, fields="adaptiveFormats,title,description"){
+	var url = "https://invidio.us/api/v1/videos/"+id+"?fields=" + fields;
 
 	Request.get(url, (err, res, bod) => {
 		if(err || !bod)
@@ -94,4 +94,12 @@ module.exports.getYTVideoInfo = function(id, callback){
 
 		callback(JSON.parse(bod));
 	});
+}
+
+module.exports.getAudioFromAdaptiveFormats = function(af, encoding="opus"){
+	for(let f of af){
+		if(f.encoding === encoding){
+			return f.url;
+		}
+	}
 }
