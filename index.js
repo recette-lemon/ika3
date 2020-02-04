@@ -32,6 +32,9 @@ Bot.on("message", message => {
 		}
 
 		try{
+			if(cmd.category === "owner" && message.author.id != Config.ownerId)
+				return;
+
 			cmd.func(message, args);
 		} catch(err){
 			console.error(err);

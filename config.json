@@ -1,5 +1,6 @@
 {
 	"token": "",
 	"trigger": "**",
-	"embedColour": 3447003
+	"embedColour": 3447003,
+	"ownerId": ""
 }
