@@ -55,36 +55,22 @@ function func(message, args){
 		});
 
 		message.channel.send({embed}).then(mes=>{
-			mes.react('◀').then(r1=>{
-				mes.react('▶').then(r2=>{
-					var collector = mes.createReactionCollector(
-						(reaction, user) => (reaction.emoji.name === '◀' || reaction.emoji.name === '▶') && user.id === message.author.id,
-						{ time: 300000 }
-					);
-					collector.on('collect', r => {
-						if(r.emoji.name == '◀'){
-							if(imgs[index - 1]){
-								index--;
-							}
-							r.remove(message.author);
-						} else if(r.emoji.name == '▶'){
-							if(imgs[index + 1]){
-								index++;
-							}
-							r.remove(message.author);
-						} else {
-							return;
-						}
+			let controls = new Utility.MessageControls(mes, message.author);
+			let index = 0;
 
-						embed.image.url = imgs[index][0];
-						embed.title = imgs[index][1];
-						embed.footer.text = (index+1) + " of " + imgs.length;
+			controls.on("reaction", r => {
+				if(r.n === 0 && imgs[index-1])
+					index--;
+				else if(r.n === 1 && imgs[index+1])
+					index++;
+				else return;
 
-						mes.edit({embed});
 
-					});
-					collector.on('end', collected => mes.clearReactions());
-				});
+				embed.image.url = imgs[index][0];
+				embed.title = imgs[index][1];
+				embed.footer.text = (index+1) + " of " + imgs.length;
+
+				mes.edit({embed});
 			});
 		});
 

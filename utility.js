@@ -2,16 +2,19 @@ const Fs = require("fs");
 const Request = require("request");
 
 module.exports.toHHMMSS = function(t){
-    let sec_num = parseInt(t, 10); // don't forget the second param
-    let hours   = Math.floor(sec_num / 3600);
-    let minutes = Math.floor((sec_num - (hours * 3600)) / 60);
-    let seconds = sec_num - (hours * 3600) - (minutes * 60);
+	let sec_num = parseInt(t, 10);
+	let hours = Math.floor(sec_num / 3600);
+	let minutes = Math.floor((sec_num - (hours * 3600)) / 60);
+	let seconds = sec_num - (hours * 3600) - (minutes * 60);
 
-    if (hours   < 10) {hours   = "0"+hours;}
-    if (minutes < 10) {minutes = "0"+minutes;}
-    if (seconds < 10) {seconds = "0"+seconds;}
-    let time    = hours+':'+minutes+':'+seconds;
-    return time;
+	if (hours < 10)
+		hours = "0"+hours;
+	if (minutes < 10)
+		minutes = "0"+minutes;
+	if (seconds < 10)
+		seconds = "0"+seconds;
+	let time = hours+':'+minutes+':'+seconds;
+	return time;
 }
 
 module.exports.getCommands = function(){
@@ -87,5 +90,40 @@ module.exports.getAudioFromAdaptiveFormats = function(af, encoding="opus"){
 		if(f.encoding === encoding){
 			return f.url;
 		}
+	}
+}
+
+module.exports.MessageControls = class MessageControls extends require("events"){
+	constructor(message, user, emojis=["◀️", "▶️"], timeOut=3000000){
+		super();
+		this.message = message;
+		this.emojis = emojis;
+		this.timeOut = timeOut;
+		this.user = user;
+
+		async function react(i){
+			await message.react(emojis[i]);
+			if(i !== emojis.length-1)
+				await react(i+1);
+		}
+
+		react(0).then(() => {
+			let collector = this.collector = message.createReactionCollector((r, u) => {
+				return u.id === user.id && emojis.indexOf(r.emoji.name) !== -1;
+			}, {
+				time: timeOut
+			});
+
+			this.emit("ready");
+
+			collector.on("collect", (r) => {
+				r.n = emojis.indexOf(r.emoji.name);
+				this.emit(r.emoji.name, r);
+				this.emit("reaction", r);
+				r.remove(this.user);
+			});
+
+			collector.on('end', collected => message.clearReactions());
+		});
 	}
 }
