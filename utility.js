@@ -1,10 +1,6 @@
 const Fs = require("fs");
 const Request = require("request");
 
-module.exports.capitalise = function capitalise(str){
-	return str[0].toUpperCase() + str.slice(1);
-}
-
 module.exports.toHHMMSS = function(t){
     let sec_num = parseInt(t, 10); // don't forget the second param
     let hours   = Math.floor(sec_num / 3600);

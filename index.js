@@ -29,7 +29,7 @@ Bot.on("message", message => {
 	if(cmd){
 		if(args.h || args.help){
 			let embed = new Discord.RichEmbed({
-				title: Utility.capitalise(cmd.name),
+				title: cmd.name,
 				description: cmd.description,
 				color: Config.embedColour
 			});
