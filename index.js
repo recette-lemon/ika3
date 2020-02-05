@@ -14,6 +14,7 @@ global.Images = Utility.getImageLists();
 Bot.on("ready", () => {
 	console.log("ready");
 	setInterval(Utility.statusRotate, 10000);
+	Utility.statusRotate();
 });
 
 Bot.on("message", message => {
