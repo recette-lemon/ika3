@@ -31,7 +31,7 @@ function func(message, args){
 		if(!res[0])
 			return message.reply("Nothing found.");
 
-		message.channel.send("Result 1 of " + res.length + " " + res[0]).then(mes=>{
+		message.channel.send("Result 1 of "+res.length+" "+res[0]).then(mes=>{
 			let controls = new Utility.MessageControls(mes, message.author);
 			let index = 0;
 
