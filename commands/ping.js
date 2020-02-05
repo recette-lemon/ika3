@@ -22,7 +22,7 @@ function func(message){
 		}
 	});
 
-	embed.addField("Ping", Bot.ping + "ms", true);
+	embed.addField("Ping", Math.round(Bot.ping) + "ms", true);
 	embed.addField("Uptime", Utility.toHHMMSS(process.uptime()), true);
 
 	message.channel.send({embed});
