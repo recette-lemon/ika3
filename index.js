@@ -28,7 +28,20 @@ Bot.on("message", message => {
 
 	if(cmd){
 		if(args.h || args.help){
-			return message.reply(Utility.getHelp(cmd));
+			let embed = new Discord.RichEmbed({
+				title: Utility.capitalise(cmd.name),
+				description: cmd.description,
+				color: Config.embedColour
+			});
+
+			embed.addField("Triggers", cmd.triggers.map(t => {return Config.trigger + t}).join(", "), true);
+
+			if(cmd.arguments.positional[0])
+				embed.addField("Arguments", cmd.arguments.positional.join(" "), true);
+			if(cmd.arguments.args[0])
+				embed.addField("Flags", cmd.arguments.args.map(a => {return "-"+a.short+" --"+a.long}).join(", "), true);
+
+			return message.reply({embed});
 		}
 
 		try{

@@ -1,7 +1,7 @@
 const Fs = require("fs");
 const Request = require("request");
 
-function capitalise(str){
+module.exports.capitalise = function capitalise(str){
 	return str[0].toUpperCase() + str.slice(1);
 }
 
@@ -33,16 +33,6 @@ module.exports.getCommands = function(){
 	}
 
 	return commands;
-}
-
-module.exports.getHelp = function(cmd){
-	let args = [];
-	for(a of cmd.arguments.args){
-		args.push("\n		-"+a.short+" --"+a.long)
-	}
-	return `${capitalise(cmd.name)}: ${cmd.description}
-	Triggers: ${cmd.triggers.join(", ")}
-	Arguments: ${cmd.arguments.positional.join(", ")} ${args.join("")}`;
 }
 
 module.exports.getImageLists = function(){
