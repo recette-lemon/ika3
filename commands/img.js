@@ -1,5 +1,5 @@
 module.exports = {
-	name: "img",
+	name: "Img",
 	triggers: ["img"],
 	description: "Image search using Searx.Me.",
 	category: "image",

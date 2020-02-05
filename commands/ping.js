@@ -1,5 +1,5 @@
 module.exports = {
-	name: "ping",
+	name: "Ping",
 	triggers: ["ping", "uptime"],
 	description: "Gives bot ping and uptime.",
 	category: "general",

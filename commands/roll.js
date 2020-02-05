@@ -1,5 +1,5 @@
 module.exports = {
-	name: "roll",
+	name: "Roll",
 	triggers: ["roll", "random", "reroll"],
 	description: "Rolls a random number.",
 	category: "general",

@@ -1,5 +1,5 @@
 module.exports = {
-	name: "ika",
+	name: "Ika",
 	triggers: ["ika"],
 	description: "Posts a cute image of Ika.",
 	category: "image",

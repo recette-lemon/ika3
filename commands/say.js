@@ -1,7 +1,7 @@
 module.exports = {
-	name: "say",
+	name: "Say",
 	triggers: ["say"],
-	description: "Says things you give it",
+	description: "Says things you give it.",
 	category: "general",
 	arguments: {
 		positional: ["string"],

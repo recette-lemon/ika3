@@ -1,5 +1,5 @@
 module.exports = {
-	name: "youtube dl",
+	name: "Youtube DL",
 	triggers: ["ytdl"],
 	description: "Posts links to audio and video downloads for YT links.",
 	category: "music",

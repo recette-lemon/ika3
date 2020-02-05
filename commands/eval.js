@@ -1,5 +1,5 @@
 module.exports = {
-	name: "eval",
+	name: "Eval",
 	triggers: ["eval", "code"],
 	description: "Evals code.",
 	category: "owner",

@@ -1,5 +1,5 @@
 module.exports = {
-	name: "invite",
+	name: "Invite",
 	triggers: ["invite"],
 	description: "Provides an invite link.",
 	category: "misc",

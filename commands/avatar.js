@@ -1,7 +1,7 @@
 module.exports = {
-	name: "avatar",
+	name: "Avatar",
 	triggers: ["avatar", "avi", "pfp"],
-	description: "Displays user's profile picture",
+	description: "Displays user's profile picture.",
 	category: "general",
 	arguments: {
 		positional: ["mention"],

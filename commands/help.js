@@ -1,7 +1,7 @@
 module.exports = {
-	name: "help",
+	name: "Help",
 	triggers: ["help"],
-	description: "Help message",
+	description: "Help message.",
 	category: "misc",
 	arguments: {
 		positional: [],
