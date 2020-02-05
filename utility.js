@@ -63,8 +63,8 @@ module.exports.imageCommand = function(message, folder){
 	});
 }
 
-module.exports.searchYT = function(terms, callback){ // yt functions can be extended in the future with more params and asking for more things
-	var url = "https://invidio.us/api/v1/search?fields=type,title,videoId,author,description&q="+encodeURIComponent(terms);
+module.exports.searchYT = function(terms, callback, fields="type,title,videoId,author,description"){ // yt functions can be extended in the future with more params and asking for more things
+	var url = "https://invidio.us/api/v1/search?fields="+fields+"&q="+encodeURIComponent(terms);
 
 	Request.get(url, (err, res, bod) => {
 		if(err || !bod)
