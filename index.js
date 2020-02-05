@@ -1,16 +1,15 @@
 global.Discord = require("discord.js");
-global.Minimist = require("minimist");
-global.Fs = require("fs");
+const Minimist = require("minimist");
+const Fs = require("fs");
 
 global.Utility = require("./utility.js");
 global.Config = JSON.parse(Fs.readFileSync("config.json"))
-global.Package = JSON.parse(Fs.readFileSync("package.json"))
 global.Commands = Utility.getCommands();
 
 global.Bot = new Discord.Client();
 Bot.login(Config.token);
 
-global.images = Utility.getImageLists();
+global.Images = Utility.getImageLists();
 
 Bot.on("ready", () => {
 	console.log("ready");

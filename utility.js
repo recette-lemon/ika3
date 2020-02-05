@@ -1,5 +1,6 @@
 const Fs = require("fs");
 const Request = require("request");
+const Package = JSON.parse(Fs.readFileSync("package.json"));
 
 var statusIndex = 0;
 
@@ -66,7 +67,7 @@ module.exports.getImageLists = function(){
 }
 
 module.exports.imageCommand = function(message, folder){
-	let file = images[folder][Math.floor(Math.random() * images[folder].length)];
+	let file = Images[folder][Math.floor(Math.random() * Images[folder].length)];
 
 	let embed = new Discord.RichEmbed({
 		color: Config.embedColour,
