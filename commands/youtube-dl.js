@@ -1,5 +1,5 @@
 module.exports = {
-	name: "youtube download",
+	name: "youtube dl",
 	triggers: ["ytdl"],
 	description: "Posts links to audio and video downloads for YT links.",
 	category: "music",
@@ -37,6 +37,4 @@ function func(message, args){
 
 		message.reply({embed});
 	}, "adaptiveFormats,title,videoThumbnails,formatStreams");
-
-	
 }
