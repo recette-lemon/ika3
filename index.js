@@ -44,10 +44,10 @@ Bot.on("message", message => {
 			return message.reply({embed});
 		}
 
-		try{
-			if(cmd.category === "owner" && message.author.id != Config.ownerId)
-				return;
+		if(cmd.category === "owner" && message.author.id != Config.ownerId)
+			return;
 
+		try{
 			cmd.func(message, args);
 		} catch(err){
 			console.error(err);
