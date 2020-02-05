@@ -1,6 +1,25 @@
 const Fs = require("fs");
 const Request = require("request");
 
+var statusIndex = 0;
+
+var statuses = [
+	()=>{return "Ika v"+Package.version},
+	()=>{return "https://eiko.cc"},
+	()=>{return "**help | **invite"},
+	()=>{return Bot.guilds.array().length+" servers, "+Bot.users.array().length+" users."}
+];
+
+module.exports.statusRotate = function statusRotate(){
+	Bot.user.setPresence({
+        game: {
+			name: statuses[statusIndex](),
+			type: 0,
+        }
+    });
+    statusIndex = (statusIndex + 1) % statuses.length;
+}
+
 module.exports.toHHMMSS = function(t){
 	let sec_num = parseInt(t, 10);
 	let hours = Math.floor(sec_num / 3600);

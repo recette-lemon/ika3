@@ -4,6 +4,7 @@ global.Fs = require("fs");
 
 global.Utility = require("./utility.js");
 global.Config = JSON.parse(Fs.readFileSync("config.json"))
+global.Package = JSON.parse(Fs.readFileSync("package.json"))
 global.Commands = Utility.getCommands();
 
 global.Bot = new Discord.Client();
@@ -13,6 +14,7 @@ global.images = Utility.getImageLists();
 
 Bot.on("ready", () => {
 	console.log("ready");
+	setInterval(Utility.statusRotate, 10000);
 });
 
 Bot.on("message", message => {
