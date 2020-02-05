@@ -16,8 +16,10 @@ module.exports = {
 
 
 if(require("fs").existsSync("/var/www/databases/map.db")){
-	Sql = require("sqlite");
-	var mapDB = Sql.open('/var/www/databases/map.db');
+	var mapDB;
+	require("sqlite").open('/var/www/databases/map.db').then((m) => {
+		mapDB = m;
+	});
 }
 
 var mapURL = "https://sylvie.moe/map/";
