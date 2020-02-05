@@ -96,10 +96,6 @@ module.exports.getAudioFromAdaptiveFormats = function(af, encoding="opus"){
 module.exports.MessageControls = class MessageControls extends require("events"){
 	constructor(message, user, emojis=["◀️", "▶️"], timeOut=3000000){
 		super();
-		this.message = message;
-		this.emojis = emojis;
-		this.timeOut = timeOut;
-		this.user = user;
 
 		async function react(i){
 			await message.react(emojis[i]);
@@ -108,7 +104,7 @@ module.exports.MessageControls = class MessageControls extends require("events")
 		}
 
 		react(0).then(() => {
-			let collector = this.collector = message.createReactionCollector((r, u) => {
+			let collector = message.createReactionCollector((r, u) => {
 				return u.id === user.id && emojis.indexOf(r.emoji.name) !== -1;
 			}, {
 				time: timeOut
@@ -120,7 +116,7 @@ module.exports.MessageControls = class MessageControls extends require("events")
 				r.n = emojis.indexOf(r.emoji.name);
 				this.emit(r.emoji.name, r);
 				this.emit("reaction", r);
-				r.remove(this.user);
+				r.remove(user);
 			});
 
 			collector.on('end', collected => message.clearReactions());
