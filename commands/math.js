@@ -52,18 +52,12 @@ var constants = {
 	log10e: 0.4342944819032518
 };
 
-var operators = ["*", "/", "+", "-"];
-
 function isLetters(str){
 	return str.toLowerCase() !== str.toUpperCase();
 }
 
 function isNumber(str){
 	return !isNaN(str);
-}
-
-function isOperator(str){
-	return operators.indexOf(str) !== -1;
 }
 
 function lexer(str){
