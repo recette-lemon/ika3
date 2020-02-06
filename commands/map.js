@@ -27,7 +27,7 @@ var mapURL = "https://sylvie.moe/map/";
 function func(message, args){
 
 	if(mapDB)
-	mapDB.get("SELECT * FROM entries WHERE discord_id=?", message.author.id, (err, res) => {
+	mapDB.get("SELECT * FROM entries WHERE discord_id=?", message.author.id).then((err, res) => {
 
 		if(!res){
 			let key = Math.random().toString(36).substring(2) + Math.random().toString(36).substring(2);
@@ -36,14 +36,13 @@ function func(message, args){
 				message.author.id,
 				message.author.username,
 				message.member.colorRole ? message.member.colorRole.color.toString(16) : "000",
-				message.author.avatar,
-			err => {
-				message.author.send(`Use this link to set your position on the map. Don't share it with others.\n${mapURL}update.html?id=${key}`).catch(err => {
-					message.reply("I need to be able to DM you to send you a link to add yourself to the map.\nRun `**map -t` when i can DM you.")
+				message.author.avatar).then(() => {
+					message.author.send(`Use this link to set your position on the map. Don't share it with others.\n${mapURL}update.html?id=${key}`).catch(err => {
+						message.reply("I need to be able to DM you to send you a link to add yourself to the map.\nRun `**map -t` when i can DM you.")
+					});
 				});
-			});
 		} else {
-			mapDB.all("SELECT discord_id FROM entries", (err, res) => {
+			mapDB.all("SELECT discord_id FROM entries").then((err, res) => {
 				Promise.all(res.map(async function(m){
 					var mem = ika.guilds.get("411345613863649310").members.get(m.discord_id);
 					if(!mem)
