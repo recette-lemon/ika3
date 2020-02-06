@@ -27,7 +27,7 @@ var mapURL = "https://sylvie.moe/map/";
 function func(message, args){
 
 	if(mapDB)
-	mapDB.get("SELECT * FROM entries WHERE discord_id=?", message.author.id).then((err, res) => {
+	mapDB.get("SELECT * FROM entries WHERE discord_id=?", message.author.id).then((res) => {
 
 		if(!res){
 			let key = Math.random().toString(36).substring(2) + Math.random().toString(36).substring(2);
@@ -42,7 +42,7 @@ function func(message, args){
 					});
 				});
 		} else {
-			mapDB.all("SELECT discord_id FROM entries").then((err, res) => {
+			mapDB.all("SELECT discord_id FROM entries").then((res) => {
 				Promise.all(res.map(async function(m){
 					var mem = ika.guilds.get("411345613863649310").members.get(m.discord_id);
 					if(!mem)
