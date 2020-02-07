@@ -69,15 +69,16 @@ module.exports.getImageLists = function(){
 module.exports.imageCommand = function(message, folder){
 	let n = Math.floor(Math.random() * Images[folder].length);
 	let file = Images[folder][n];
-	let name = folder+"-"+(n+1)+"."+file.split(".").pop();
+	let ext = file.split(".").pop();
+	let name = folder+"-"+(n+1)+"."+ext;
 
-	let embed = new Discord.RichEmbed({
+	let embed = ["png", "jpg", "jpeg", "gif"].indexOf(ext.toLowerCase()) != -1 ? new Discord.RichEmbed({
 		color: Config.embedColour,
 		image: {url: "attachment://"+name},
 		footer: {
 			text: "#"+(n+1)+" of "+Images[folder].length
 		}
-	});
+	}) : null;
 
 	message.channel.send({
 		embed,
