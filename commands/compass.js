@@ -14,7 +14,7 @@ module.exports = {
 	func: func
 };
 
-var DB;
+global.DB;
 require("sqlite").open('./ika-db.sqlite').then((m) => {
 	DB = m;
 });
