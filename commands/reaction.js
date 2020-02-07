@@ -1,5 +1,5 @@
 module.exports = {
-	name: "reaction",
+	name: "Reaction",
 	description: "Various one-off commands with little purpose.",
 	category: "misc",
 	arguments: {
