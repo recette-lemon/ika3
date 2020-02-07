@@ -37,7 +37,7 @@ Bot.on("message", message => {
 				color: Config.embedColour
 			});
 
-			embed.addField("Triggers", cmd.triggers.map(t => {return Config.trigger + t}).join(", "), true);
+			embed.addField("Triggers", cmd.triggers.map(t => {return Config.trigger.split("").join("\\") + t}).join(", "), true);
 
 			if(cmd.arguments.positional[0])
 				embed.addField("Arguments", cmd.arguments.positional.join(" "), true);
