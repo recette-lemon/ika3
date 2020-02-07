@@ -4,12 +4,13 @@ const Fs = require("fs");
 
 global.Utility = require("./utility.js");
 global.Config = JSON.parse(Fs.readFileSync("config.json"))
+
+global.Images = Utility.getImageLists();
+
 global.Commands = Utility.getCommands();
 
 global.Bot = new Discord.Client();
 Bot.login(Config.token);
-
-global.Images = Utility.getImageLists();
 
 Bot.on("ready", () => {
 	console.log("ready");
@@ -50,7 +51,7 @@ Bot.on("message", message => {
 			return;
 
 		try{
-			cmd.func(message, args);
+			cmd.func(message, args, command);
 		} catch(err){
 			console.error(err);
 
