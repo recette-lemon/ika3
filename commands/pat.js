@@ -21,7 +21,7 @@ function func(message){
 
 	DB.get("SELECT pats FROM headpats WHERE id=?", message.author.id).then(res => {
 
-		let pats = (res.pats || 0) + 1;
+		let pats = res ? res.pats + 1 : 1;
 
 		DB.run("REPLACE INTO headpats (id, pats) VALUES (?, ?)", message.author.id, pats).then(() => {
 			embed.title = message.author.username+" has given "+pats+" headpats.";
