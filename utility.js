@@ -72,7 +72,7 @@ module.exports.imageCommand = function(message, folder){
 	let ext = file.split(".").pop();
 	let name = folder+"-"+(n+1)+"."+ext;
 
-	let embed = ["png", "jpg", "jpeg", "gif"].indexOf(ext.toLowerCase()) != -1 ? new Discord.RichEmbed({
+	let embed = ~["png", "jpg", "jpeg", "gif"].indexOf(ext.toLowerCase()) ? new Discord.RichEmbed({
 		color: Config.embedColour,
 		image: {url: "attachment://"+name},
 		footer: {
