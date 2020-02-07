@@ -46,6 +46,10 @@ function func(message, args){
 
 		DB.run("REPLACE INTO headpats (id, pats) VALUES (?, ?)", message.author.id, pats).then(() => {
 			embed.title = message.author.username+" has given "+pats+" headpats.";
+
+			if(message.mentions.users.first())
+				embed.description = "Patted "+message.mentions.users.first().username;
+
 			message.channel.send({embed});
 		});
 	});
