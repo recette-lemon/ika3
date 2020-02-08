@@ -5,7 +5,11 @@ module.exports = {
 	category: "game",
 	arguments: {
 		positional: [],
-		args: []
+		args: [
+			{
+				short: "l", long: "leaderboard"
+			}
+		]
 	},
 	func: func
 };
