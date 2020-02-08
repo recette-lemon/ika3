@@ -22,10 +22,10 @@ module.exports.statusRotate = function statusRotate(){
 }
 
 module.exports.toHHMMSS = function(t){
-	let sec_num = parseInt(t, 10);
-	let hours = Math.floor(sec_num / 3600);
-	let minutes = Math.floor((sec_num - (hours * 3600)) / 60);
-	let seconds = sec_num - (hours * 3600) - (minutes * 60);
+	let sec_num = parseInt(t, 10),
+		hours = Math.floor(sec_num / 3600),
+		minutes = Math.floor((sec_num - (hours * 3600)) / 60),
+		seconds = sec_num - (hours * 3600) - (minutes * 60);
 
 	if (hours < 10)
 		hours = "0"+hours;
@@ -38,8 +38,8 @@ module.exports.toHHMMSS = function(t){
 }
 
 module.exports.getCommands = function(){
-	let files = Fs.readdirSync("./commands");
-	let commands = {};
+	let files = Fs.readdirSync("./commands"),
+		commands = {};
 
 	for(file of files){
 		let loc = "./commands/"+file;
@@ -67,10 +67,10 @@ module.exports.getImageLists = function(){
 }
 
 module.exports.imageCommand = function(message, folder){
-	let n = Math.floor(Math.random() * Images[folder].length);
-	let file = Images[folder][n];
-	let ext = file.split(".").pop();
-	let name = folder+"-"+(n+1)+"."+ext;
+	let n = Math.floor(Math.random() * Images[folder].length),
+		file = Images[folder][n],
+		ext = file.split(".").pop(),
+		name = folder+"-"+(n+1)+"."+ext;
 
 	let embed = ~["png", "jpg", "jpeg", "gif"].indexOf(ext.toLowerCase()) ? new Discord.RichEmbed({
 		color: Config.embedColour,
