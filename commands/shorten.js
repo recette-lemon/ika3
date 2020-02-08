@@ -10,14 +10,14 @@ module.exports = {
 	func: func
 };
 
-var request = require("request");
+var Request = require("request");
 
 function func(message, args){
 	let url = args._[0]
 	if(!url)
 		return message.reply("Need something to shorten.");
 
-	request.post({url: "https://l.1776.moe/api.php", form: {link: url}}, (err, res, bod) => {
+	Request.post({url: "https://l.1776.moe/api.php", form: {link: url}}, (err, res, bod) => {
 		if(err || !bod)
 			throw("nope");
 
