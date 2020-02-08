@@ -28,8 +28,8 @@ function func(message, args){
 		embed.description = mes.slice(0, 250);
 	embed.setTitle("Roll it!");
 
-	let roll = Math.floor(Math.random() * 999999999);
-	let streak = roll.toString().match(/(.)\1*$/)[0].length;
+	let roll = Math.floor(Math.random() * 999999999),
+		streak = roll.toString().match(/(.)\1*$/)[0].length;
 
 	embed.addField((streak < 6 ? congrats[streak - 1] : congrats[5]), roll);
 	message.channel.send({embed});

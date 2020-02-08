@@ -11,7 +11,9 @@ module.exports = {
 };
 
 function func(message, args){
-	if(!args._[0]) return message.reply("Fucking give me something to say, you retard.").catch(console.error);
-	message.channel.send(args._.join(" ")).catch(console.error);
-	message.delete().catch(console.error);
+	if(!args._[0])
+		return message.reply("Fucking give me something to say, you retard.");
+
+	message.channel.send(args._.join(" "));
+	message.delete();
 }

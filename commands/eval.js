@@ -13,9 +13,8 @@ module.exports = {
 };
 
 function func(message, args){
-	let term = args._.join(" ");
-
-	let out = eval(term);
+	let term = args._.join(" "),
+		out = eval(term);
 
 	if(typeof(out) == "object")
 		out = out.constructor.name + "\n" + JSON.stringify(out);

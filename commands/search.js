@@ -32,8 +32,8 @@ function func(message, args){
 			return message.reply("Nothing found.");
 
 		message.channel.send("Result 1 of "+res.length+" "+res[0]).then(mes=>{
-			let controls = new Utility.MessageControls(mes, message.author);
-			let index = 0;
+			let controls = new Utility.MessageControls(mes, message.author),
+				index = 0;
 
 			controls.on("reaction", r => {
 				if(r.n === 0 && res[index-1])

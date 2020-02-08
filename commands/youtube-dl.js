@@ -16,12 +16,12 @@ function func(message, args){
 	if(!term)
 		return message.reply("I need something to get.");
 
-	var id = term.split("/").pop().split("?v=").pop().split("&")[0];
+	let id = term.split("/").pop().split("?v=").pop().split("&")[0];
 
 	Utility.getYTVideoInfo(id, (res) => {
 
-		let audio = Utility.getAudioFromAdaptiveFormats(res.adaptiveFormats);
-		let video = Utility.getAudioFromAdaptiveFormats(res.formatStreams, "h264");
+		let audio = Utility.getAudioFromAdaptiveFormats(res.adaptiveFormats),
+			video = Utility.getAudioFromAdaptiveFormats(res.formatStreams, "h264");
 
 		let embed = new Discord.RichEmbed({
 			title: res.title,

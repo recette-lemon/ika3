@@ -28,8 +28,8 @@ function func(message, args){
 				embed.title = sum["TOTAL(pats)"]+" total pats, "+sum["COUNT(pats)"]+" patters, "+sum["AVG(pats)"].toFixed(1)+" average.";
 
 				for(var i = 0; i < res.length; i += 2){
-					let u1 = "#"+(i+1)+" "+((Bot.users.get(res[i].id)||{}).username||"?")+": "+res[i].pats;
-					let u2 = "#"+(i+2)+" "+((Bot.users.get(res[i+1].id)||{}).username||"?")+": "+res[i+1].pats;
+					let u1 = "#"+(i+1)+" "+((Bot.users.get(res[i].id)||{}).username||"?")+": "+res[i].pats,
+						u2 = "#"+(i+2)+" "+((Bot.users.get(res[i+1].id)||{}).username||"?")+": "+res[i+1].pats;
 					embed.addField(u1, u2);
 				}
 

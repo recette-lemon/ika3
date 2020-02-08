@@ -63,7 +63,7 @@ function isNumber(str){
 function lexer(str){
 	let tokens = str.match(/(\*\*)|([a-zA-Z]+)|((?<![0-9])-?(0[xob])?[0-9.]+)|([^\s])/g); // seperate tokens
 
-	for (var i = 0; i < tokens.length; i++){ // convert numbers into proper numbers
+	for (let i = 0; i < tokens.length; i++){ // convert numbers into proper numbers
 		if(tokens[i].startsWith("0x")){ // hex
 			tokens[i] = parseInt(tokens[i].split("x")[1], 16); // parseFloat doesnt support radix grrrr
 		}
@@ -156,8 +156,8 @@ function precedence(op){
 function shuntyarder(tokens){
 	//thank you, edsger dijkstra
 
-	let v_stack = []; // values
-	let o_stack = []; // operators
+	let v_stack = [], // values
+		o_stack = []; // operators
 
 	for (var i = 0; i < tokens.length; i++) {
 		let token = tokens[i];
@@ -185,9 +185,9 @@ function shuntyarder(tokens){
 
 		if(isLetters(token)){ // token is a function
 
-			let f = functions[token];
-			let args = [[]];
-			let brackets = 1;
+			let f = functions[token],
+				args = [[]],
+				brackets = 1;
 			i += 2; // skip function and opening bracket
 
 			while(tokens[i]){ // create 2d array of tokens split by ,
@@ -249,8 +249,8 @@ function evalMaths(str){
 
 function func(message, args){
 	
-	let expression = args._.join(" ");
-	let nbase = args.n || args["number-base"] || (args.x||args.hex?16:0) || (args.o||args.oct?8:0) || (args.b||args.bin?2:0) || 10;
+	let expression = args._.join(" "),
+		nbase = args.n || args["number-base"] || (args.x||args.hex?16:0) || (args.o||args.oct?8:0) || (args.b||args.bin?2:0) || 10;
 
 	if(!expression)
 		return message.reply("Need something to parse.");
