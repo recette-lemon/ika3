@@ -1,7 +1,7 @@
 module.exports = {
 	name: "Img",
 	triggers: ["img"],
-	description: "Image search using Searx.Me.",
+	description: "Image search using DuckDuckGo.",
 	category: "image",
 	arguments: {
 		positional: ["terms"],
