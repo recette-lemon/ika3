@@ -2,7 +2,7 @@ module.exports = {
 	name: "Search",
 	triggers: ["search", "g"],
 	description: "Search using Searx.me.",
-	category: "general",
+	category: "search",
 	arguments: {
 		positional: ["terms"],
 		args: []

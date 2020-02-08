@@ -2,7 +2,7 @@ module.exports = {
 	name: "Youtube",
 	triggers: ["youtube", "yt"],
 	description: "Searches for Youtube vids.",
-	category: "general",
+	category: "search",
 	arguments: {
 		positional: ["terms"],
 		args: []

@@ -2,7 +2,7 @@ module.exports = {
 	name: "Img",
 	triggers: ["img"],
 	description: "Image search using DuckDuckGo.",
-	category: "image",
+	category: "search",
 	arguments: {
 		positional: ["terms"],
 		args: []

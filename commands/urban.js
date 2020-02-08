@@ -2,7 +2,7 @@ module.exports = {
 	name: "Urban Dictionary",
 	triggers: ["urban", "ud"],
 	description: "Gets a definition from UD.",
-	category: "misc",
+	category: "search",
 	arguments: {
 		positional: ["term"],
 		args: []
