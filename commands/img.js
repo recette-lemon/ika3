@@ -38,7 +38,6 @@ function func(message, args){
 
 				embed = new Discord.RichEmbed({
 				title: results[0].title,
-				description: results[0].width+"x"+results[0].height,
 				author: {
 					name: results[0].url.split("/")[2],
 					url: results[0].url
@@ -48,7 +47,7 @@ function func(message, args){
 				},
 				color: Config.embedColour,
 				footer: {
-					text: "1 of "+results.length
+					text: "1 of "+results.length + " | " + results[0].width+"x"+results[0].height
 				}
 			});
 
@@ -66,9 +65,8 @@ function func(message, args){
 					embed.author.name = results[index].url.split("/")[2];
 					embed.author.url = results[index].url;
 					embed.image.url = results[index].image;
-					embed.description = results[index].width+"x"+results[index].height;
 					embed.title = results[index].title;
-					embed.footer.text = (index+1)+" of "+results.length;
+					embed.footer.text = (index+1)+" of "+results.length + " | " + results[index].width+"x"+results[index].height;
 
 					mes.edit({embed});
 				});
