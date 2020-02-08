@@ -10,69 +10,69 @@ module.exports = {
 	func: func
 };
 
-var request = require("request"),
-	base = "https://goso.ga/?preferences=eJx1VUGv2zYM_jXzxUixroedfBhWDC1Q4BXLa68CLTE2Z1l0KTl57q8fldiO8toe4sAUye_jJ5IWjLNP0XAwAS8mQdv8Az5i5ZiMYGR_RmmipUM_t2_SpfIQuhk6bDAcvhwrzxZ8fqkcRWg9OjP5uaMQm680HjwNaHpOAy7xtz_-fpow5KwKaTyFYcdthS8RJeNnv4_hRIESmmiFvd8i_7IWYzTvnz5qkouoQ0WjcjGT8MuyEoc5seVx8piwqSKcMCKI7Zvfq9TjiA1HC1JheGR7RH8yissyQiIOmcazgB2U1Zd_PyngyCqFWj88P38-bgT0_XhNnyuxkLBjWUxEjzbdJcGgGBibgewAWoE5kceMcBLEOvIpXUCwdiQalhMYSnp6ZkjGRLYEvh7REaiRAhhzJoecEwg6Rz86zSFOHmKvibJA2bNj7jzWal5qmKaCxPvZqbimw4ACWey3L2UcdVoExFR6bLB6d9cynDC5e8awABQp9rJ32iWZcY5kjbn-6ZG19pDOPynxjt4hDolGjKtON7gtQUuhK70vNJCDBKUNbBd5_hUhPhOWbB3Z9J0DlhkcdW0qfOwsgsEuP0PZZNkq2YVZk2znqFOQZbxnOIEw7zJ7agVkqfN5pPgApS1IZ6xfWVcCd2lSO2tLp1W4BfqcvsATnUoCW3DsQUHzY41ZKd1jMC0jBx3nB31gGuqRRHiLSzwsnDj2PEC4U7rd3S7jSWCEXCeuYeMy6uRp0UkgRK8T9iDQyP9pM5QW1k0hOHHR4E5rzr-O61tZRXk3_M3zFcmiA64XtZF-5bZFR_weYCzJ6KoJUscks02zZGBdpdomuPbllOf1IeC6TCw7rPNjFeHtu3d_vpTdSslDux4619UOrwsz760y2z54G_GtIW7l70tw208LBIcvD22-S1dav10gPExkTCBpyqt4M1Yjpp5d8_np-Fyti1GnqtmOr1v4ENOiXw_PHeVqz_8D-tV37A==&category_images=on&q="
+var request = require("request");
+
+var pageBase = "https://duckduckgo.com/?ia=images&iax=images&k5=1&kp=-2&q=";
+var jsonBase = "https://duckduckgo.com/i.js?l=us-en&o=json&vqd=VQD&f=,,,&p=-1&v7exp=a&q=";
 
 function func(message, args){
-	let query = args._.join(" ");
+	let query = encodeURIComponent(args._.join(" "));
 	if(!query)
 		return message.reply("Gonna need something to search for.");
-	let url = base + query;
 	
-	request.get(url, function(err, res, bod){
-		if(err || !bod)
+	request.get(pageBase+query, (perr, pres, pbod) => {
+		if(perr || !pbod)
 			throw("nope");
 
-		let results = bod.match(/<a href=".+\n.+class="img-thumbnail">\n<\/a>/g),
-			imgs = [];
+		let vqd = pbod.match(/&vqd=(.+)&p/)[1],
+			url = jsonBase.replace("VQD", vqd)+query;
 
-		for(let result of results){
-			result = result.split('"');
+		request.get(url, (jerr, jres, jbod) => {
 
-			let url = result[1],
-				title = result[11];
+			let results = JSON.parse(jbod).results;
 
-			if(url.startsWith("//"))
-				url = "https:" + url;
+			if(!results[0])
+				return message.reply("Nothing found.");
 
-			imgs.push([url, title]);
-		}
+			let index = 0,
 
-		if(!imgs[0])
-			return message.reply("Nothing found.");
+				embed = new Discord.RichEmbed({
+				title: results[0].title,
+				description: results[0].width+"x"+results[0].height,
+				author: {
+					name: results[0].url.split("/")[2],
+					url: results[0].url
+				},
+				image: {
+					url: results[0].image
+				},
+				color: Config.embedColour,
+				footer: {
+					text: "1 of "+results.length
+				}
+			});
 
-		let index = 0,
+			message.channel.send({embed}).then(mes=>{
+				let controls = new Utility.MessageControls(mes, message.author),
+					index = 0;
 
-			embed = new Discord.RichEmbed({
-			title: imgs[0][1],
-			image: {
-				url: imgs[0][0]
-			},
-			color: Config.embedColour,
-			footer: {
-				text: "1 of " + imgs.length
-			}
-		});
+				controls.on("reaction", r => {
+					if(r.n === 0 && results[index-1])
+						index--;
+					else if(r.n === 1 && results[index+1])
+						index++;
+					else return;
 
-		message.channel.send({embed}).then(mes=>{
-			let controls = new Utility.MessageControls(mes, message.author),
-				index = 0;
+					embed.author.name = results[index].url.split("/")[2];
+					embed.author.url = results[index].url;
+					embed.image.url = results[index].image;
+					embed.description = results[index].width+"x"+results[index].height;
+					embed.title = results[index].title;
+					embed.footer.text = (index+1)+" of "+results.length;
 
-			controls.on("reaction", r => {
-				if(r.n === 0 && imgs[index-1])
-					index--;
-				else if(r.n === 1 && imgs[index+1])
-					index++;
-				else return;
-
-
-				embed.image.url = imgs[index][0];
-				embed.title = imgs[index][1];
-				embed.footer.text = (index+1) + " of " + imgs.length;
-
-				mes.edit({embed});
+					mes.edit({embed});
+				});
 			});
 		});
-
 	});
 }
