@@ -2,7 +2,7 @@ module.exports = {
 	name: "Answer",
 	triggers: ["answer", "ans"],
 	description: "Answers a question.",
-	category: "general",
+	category: "game",
 	arguments: {
 		positional: ["question"],
 		args: []
