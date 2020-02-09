@@ -8,7 +8,7 @@ var commandNumber;
 
 var statuses = [
 	()=>{return "Ika v"+Package.version},
-	()=>{return "https://eiko.cc"},
+	()=>{return "https://ika.eiko.cc"},
 	()=>{return "**help | **invite"},
 	()=>{return Bot.guilds.array().length+" servers, "+Bot.users.array().length+" users, "+commandNumber+" commands."}
 ];
@@ -154,13 +154,18 @@ module.exports.MessageControls = class MessageControls extends require("events")
 	}
 }
 
-var get = module.exports.get = function(url, callback){
-	let http = url.startsWith("https://") ? Https : Http;
-	http.get(url, {
+var get = module.exports.get = function(url, obj={
 		headers: {
 			"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"
 		}
-	}, (res) => {
+	}, callback){
+	if(!callback){
+		callback = obj;
+		obj = {}
+	}
+
+	let http = url.startsWith("https://") ? Https : Http;
+	http.get(url, obj, (res) => {
 		res.setEncoding('utf8');
 		let bod = "";
 

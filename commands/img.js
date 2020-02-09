@@ -18,12 +18,13 @@ function func(message, args){
 	if(!query)
 		return message.reply("Gonna need something to search for.");
 	
-	Utility.get(pageBase+query, (perr, pres, pbod) => {
+	Utility.get(pageBase+query, {}, (perr, pres, pbod) => {
 		if(perr || !pbod)
 			throw("nope");
 
 		let vqd = pbod.match(/&vqd=(.+)&p/)[1],
 			url = jsonBase.replace("VQD", vqd)+query;
+
 
 		Utility.get(url, (jerr, jres, jbod) => {
 
