@@ -2,7 +2,7 @@ module.exports = {
 	name: "Roll",
 	triggers: ["roll", "random", "reroll"],
 	description: "Rolls a random number.",
-	category: "general",
+	category: "game",
 	arguments: {
 		positional: ["string"],
 		args: []
