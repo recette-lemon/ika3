@@ -1,5 +1,5 @@
 global.Discord = require("discord.js");
-const Minimist = require("minimist");
+const Minimist = require("./minimist.js");
 const Fs = require("fs");
 
 global.Utility = require("./utility.js");

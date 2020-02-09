@@ -198,5 +198,5 @@ module.exports.getUser = function(message, args){
 		}
 		return Bot.users.find((u) => {return u.username == a});
 	}
-	return Bot.users.get(message.content.split(" ")[1]); // fucky, but whatever
+	return Bot.users.get(args._[0]);
 }
