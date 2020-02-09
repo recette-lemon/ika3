@@ -4,12 +4,13 @@ const Https = require("https");
 const Http = require("http");
 
 var statusIndex = 0;
+var commandNumber;
 
 var statuses = [
 	()=>{return "Ika v"+Package.version},
 	()=>{return "https://eiko.cc"},
 	()=>{return "**help | **invite"},
-	()=>{return Bot.guilds.array().length+" servers, "+Bot.users.array().length+" users."}
+	()=>{return Bot.guilds.array().length+" servers, "+Bot.users.array().length+" users, "+commandNumber+" commands."}
 ];
 
 module.exports.statusRotate = function statusRotate(){
@@ -41,6 +42,8 @@ module.exports.toHHMMSS = function(t){
 module.exports.getCommands = function(){
 	let files = Fs.readdirSync("./commands"),
 		commands = {};
+
+	commandNumber = files.length;
 
 	for(file of files){
 		let loc = "./commands/"+file;
