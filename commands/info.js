@@ -40,8 +40,8 @@ function func(message, args){
 		embed.addField("Users", message.guild.memberCount, true);
 		embed.addField("Roles", message.guild.roles.array().length, true);
 		embed.addField("Channels", message.guild.channels.array().length, true);
-		embed.addField("Owner", message.guild.owner.user.username);
-		embed.addField("Region", message.guild.region);
+		embed.addField("Owner", message.guild.owner.user.tag, true);
+		embed.addField("Region", message.guild.region, true);
 	}
 
 	message.channel.send({embed});
