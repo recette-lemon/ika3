@@ -1,6 +1,7 @@
 const Fs = require("fs");
-const Request = require("request");
 const Package = JSON.parse(Fs.readFileSync("package.json"));
+const Https = require("https");
+const Http = require("http");
 
 var statusIndex = 0;
 
@@ -92,7 +93,7 @@ module.exports.imageCommand = function(message, folder){
 module.exports.searchYT = function(terms, callback, fields="type,title,videoId,author,description"){ // yt functions can be extended in the future with more params and asking for more things
 	var url = "https://invidio.us/api/v1/search?fields="+fields+"&q="+encodeURIComponent(terms);
 
-	Request.get(url, (err, res, bod) => {
+	get(url, (err, res, bod) => {
 		if(err || !bod)
 			throw("nope");
 
@@ -103,7 +104,7 @@ module.exports.searchYT = function(terms, callback, fields="type,title,videoId,a
 module.exports.getYTVideoInfo = function(id, callback, fields="adaptiveFormats,title,description"){
 	var url = "https://invidio.us/api/v1/videos/"+id+"?fields=" + fields;
 
-	Request.get(url, (err, res, bod) => {
+	get(url, (err, res, bod) => {
 		if(err || !bod)
 			throw("nope");
 
@@ -148,4 +149,30 @@ module.exports.MessageControls = class MessageControls extends require("events")
 			collector.on('end', collected => message.clearReactions());
 		});
 	}
+}
+
+var get = module.exports.get = function(url, callback){
+	let http = url.startsWith("https://") ? Https : Http;
+	http.get(url, {
+		headers: {
+			"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"
+		}
+	}, (res) => {
+		res.setEncoding('utf8');
+		let bod = "";
+
+		res.on("data", (chunk) => {
+			bod += chunk;
+		});
+
+		res.on("end", () => {
+			callback(null, res, bod);
+			console.log("end")
+		});
+
+		res.on("error", (err) => {
+			console.error(err)
+			callback(err, null, null);
+		});
+	});
 }

@@ -17,7 +17,7 @@ function func(message, args){
 	if(!term)
 		return reply("Need something to define.");
 
-	let url = "https://www.urbandictionary.com/define.php?term="+encodeURIComponent(term);
+	let url = "http://www.urbandictionary.com/define.php?term="+encodeURIComponent(term);
 
 	Request.get(url, (err, res, bod) => {
 		let def = bod.match(/property="fb:app_id"><meta content\=\"(.+)" name="Descri/);

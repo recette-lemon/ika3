@@ -24,8 +24,7 @@
   "homepage": "https://gitlab.com/recette_lemonweed/ika3",
   "dependencies": {
     "discord.js": "^11.5.1",
-    "minimist": "^1.2.0",
-    "request": "^2.88.0"
+    "minimist": "^1.2.0"
   },
   "optionalDependencies": {
     "node-opus": "^0.3.3",

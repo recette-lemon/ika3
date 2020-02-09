@@ -10,9 +10,7 @@ module.exports = {
 	func: func
 };
 
-var Request = require("request");
-
-var pageBase = "https://duckduckgo.com/?ia=images&iax=images&k5=1&kp=-2&q=";
+var pageBase = "http://duckduckgo.com/?ia=images&iax=images&k5=1&kp=-2&q=";
 var jsonBase = "https://duckduckgo.com/i.js?l=us-en&o=json&vqd=VQD&f=,,,&p=-1&v7exp=a&q=";
 
 function func(message, args){
@@ -20,14 +18,14 @@ function func(message, args){
 	if(!query)
 		return message.reply("Gonna need something to search for.");
 	
-	Request.get(pageBase+query, (perr, pres, pbod) => {
+	Utility.get(pageBase+query, (perr, pres, pbod) => {
 		if(perr || !pbod)
 			throw("nope");
 
 		let vqd = pbod.match(/&vqd=(.+)&p/)[1],
 			url = jsonBase.replace("VQD", vqd)+query;
 
-		Request.get(url, (jerr, jres, jbod) => {
+		Utility.get(url, (jerr, jres, jbod) => {
 
 			let results = JSON.parse(jbod).results;
 			let index = 0;
