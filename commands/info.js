@@ -22,7 +22,7 @@ function func(message, args){
 		author: {
 			name: s ? message.guild.name : user.tag
 		},
-		color: member.displayColor || Config.embedColour,
+		color: s ? Config.embedColour : member.displayColor || Config.embedColour,
 		thumbnail: {
 			url: s ? message.guild.iconURL : user.avatarURL || user.defaultAvatarURL
 		},
