@@ -5,28 +5,24 @@ module.exports = {
 	category: "general",
 	arguments: {
 		positional: ["mention"],
-		args: []
+		args: [
+			{short: "s", long: "server"}
+		]
 	},
 	func: func
 };
 
 function func(message, args){
-	let aviurl;
-	//TODO: ID check only works for ID 1, Clyde. Possibly something to do with the users object referencing users?
-	let user = message.mentions.users.first() || Bot.users.get(args._[0]+'') || Bot.users.find(user => user.tag === args._.join(" "));
 
-	if(!args._[0]) user = message.author;
-	if(!user) return message.reply("User not found.");
-	if(args._[0] == "server"){
-		if(!message.guild) return message.reply("No guild.");
-		aviurl = message.guild.iconURL;
-	} else {
-		aviurl = user.avatarURL;
-		if(!aviurl) return message.reply("No avatar.");
-	}
+	let user = Utility.getUser(message, args) || message.author,
+		s = (args.s || args.server),
+		aviurl = s ? message.guild.iconURL : user.avatarURL || user.defaultAvatarURL;
+
 	let embed = new Discord.RichEmbed({
 		color: Config.embedColour,
-		image: {url: aviurl}
+		image: {
+			url: aviurl
+		}
 	});
 	message.channel.send({embed});
 }

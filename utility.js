@@ -184,3 +184,19 @@ var get = module.exports.get = function(url, obj={
 		});
 	});
 }
+
+module.exports.getUser = function(message, args){
+
+	if(message.mentions.users.first())
+		return message.mentions.users.first();
+
+	let a = args._.join(" ");
+
+	if(isNaN(a)){
+		if(a.includes("#")){
+			return Bot.users.find((u) => {return u.tag == a});
+		}
+		return Bot.users.find((u) => {return u.username == a});
+	}
+	return Bot.users.get(message.content.split(" ")[1]); // fucky, but whatever
+}
