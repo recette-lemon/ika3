@@ -14,10 +14,6 @@ module.exports = {
 	func: func
 };
 
-function clamp(x, ma, mi){
-	return Math.min(Math.max(x, mi), ma);
-}
-
 function getCompassURL(values){
 	return "https://www.politicalcompass.org/charts/crowdchart?" + values.map(v => {
 		return encodeURIComponent(v[0])+"="+v[1]+","+v[2];
@@ -28,8 +24,8 @@ function func(message, args){
 
 	let a = message.content.split(" ").slice(1)
 
-	let x = clamp(Math.round(a[0] * 10), 100, -100);
-	let y = clamp(Math.round(a[1] * 10), 100, -100);
+	let x = Utility.clamp(Math.round(a[0] * 10), 100, -100);
+	let y = Utility.clamp(Math.round(a[1] * 10), 100, -100);
 
 	if(x && y){
 		DB.run("REPLACE INTO compass (id, x, y) VALUES (?, ?, ?)", message.author.id, x, y).then(() => {

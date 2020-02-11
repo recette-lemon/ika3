@@ -22,7 +22,12 @@ Bot.on("ready", () => {
 	Utility.statusRotate();
 });
 
-Bot.on("message", message => {
+Bot.on("guildMemberAdd", (member) => {
+	if(guildConfigs[member.guild.id].mutes[member.id])
+		Utility.checkUserMute(guildConfigs[member.guild.id].mutes[member.id], member.guild.id, member.id);
+});
+
+Bot.on("message", (message) => {
 	if(!message.content.startsWith(Config.trigger) || message.author.bot)
 		return;
 

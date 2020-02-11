@@ -24,7 +24,7 @@ function parseTime(str){
 }
 
 function unmute(user, role, mutes){
-	user.removeRole(role);
+	user.removeRole(role).catch();
 	delete mutes[user.id];
 }
 
@@ -36,12 +36,12 @@ function func(message, args){
 		return message.reply("Mute role not set. Use the config command.");
 
 	let user = message.mentions.members.first(),
-		time = parseTime(args._[1]),
+		time = Utility.clamp(parseTime(args._[1]), 604800, 0),
 		roleP = guildConfigs[message.guild.id].muterole,
-		role = message.guild.roles.get(roleP) || message.guild.roles.find((r) => {return r.name.toLowerCase() == roleP.join(" ").toLowerCase()});
+		role = message.guild.roles.get(roleP) || message.guild.roles.find((r) => {return r.name.toLowerCase() === roleP.join(" ").toLowerCase()});
 
 	if(!(user && time && role))
-		return message.reply("Need a mention and length, in that order, and a valid role id/name.");
+		return message.reply("Need a mention and length, in that order, and a valid role id/name set.");
 
 	if(user.highestRole.comparePositionTo(message.member.highestRole) >= 0)
 		return message.reply("You arent higher than them in the role list.");

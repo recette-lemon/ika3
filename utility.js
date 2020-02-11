@@ -234,6 +234,24 @@ function guildConfigProxy(gobj, id){
 	return new Proxy(gobj, guildConfigProxyListener(gobj, id));
 }
 
+var checkUserMute = module.exports.checkUserMute = function(mute, guildId, userId){
+	let member = Bot.guilds.get(guildId).members.get(userId),
+		timeSince = ((new Date).getTime() - mute.start) / 1000;
+	if(timeSince >= mute.time){
+		unmute(guildId, userId, mute.role);
+		delete guildConfigs[guildId].mutes[userId];
+		return;
+	}
+
+	if(!member.roles.has(mute.role))
+		member.addRole(mute.role).catch();
+
+	setTimeout(() => {
+		unmute(guildId, userId, mute.role);
+		delete guildConfigs[guildId].mutes[userId];
+	}, (mute.time - timeSince) * 1000);
+}
+
 function initGuildConfig(){
 	guildConfigs = new Proxy({}, {
 		get: function(obj, prop){
@@ -247,16 +265,7 @@ function initGuildConfig(){
 		for(let r of res){
 			let g = guildConfigs[r.guild] = guildConfigProxy(JSON.parse(r.config), r.guild);
 			for(let u of Object.keys(g.mutes)){
-				let timeSince = ((new Date).getTime() - g.mutes[u].start) / 1000;
-				if(timeSince >= g.mutes[u].time){
-					unmute(r.guild, u, g.mutes[u].role);
-					delete g.mutes[u];
-					continue
-				}
-				setTimeout(() => {
-					unmute(r.guild, u, g.mutes[u].role);
-					delete g.mutes[u];
-				}, (g.mutes[u].time - timeSince) * 1000);
+				checkUserMute(g.mutes[u], r.guild, u);
 			}
 		}
 	});
@@ -279,4 +288,8 @@ module.exports.initDB = function(){
 
 		initGuildConfig();
 	});
+}
+
+module.exports.clamp = function(n, ma, mi){
+	return Math.min(Math.max(n, mi), ma);
 }
