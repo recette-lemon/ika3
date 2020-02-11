@@ -4,7 +4,7 @@ module.exports = {
 	description: "Evaluates mathematical expressions. Supports every function and constant in the JS Math object, aswell as bitwise operations and converting from and to different number bases, 0x12, 0o12, 0b12.",
 	category: "general",
 	arguments: {
-		positional: [],
+		positional: ["expression"],
 		args: [
 			{short: "n", long: "number-base"},
 			{short: "x", long: "hex"},

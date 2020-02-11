@@ -59,6 +59,9 @@ Bot.on("message", (message) => {
 		if(cmd.category === "owner" && message.author.id != Config.ownerId)
 			return;
 
+		if(message.guild && guildConfigs[message.guild.id].disabledcommands && guildConfigs[message.guild.id].disabledcommands.includes(cmd.name.toLowerCase()) && cmd.category !== "owner")
+			return;
+
 		try{
 			cmd.func(message, args, command);
 		} catch(err){

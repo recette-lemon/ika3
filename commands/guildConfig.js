@@ -14,7 +14,8 @@ module.exports = {
 };
 
 var keys = [
-	"muterole"
+	"muterole",
+	"disabledcommands"
 ];
 
 function func(message, args){
@@ -27,9 +28,6 @@ function func(message, args){
 	let key = args._[0];
 	let values = args._.length < 3 ? args._[1] : args._.slice(1);
 
-	if(!values && !(args.v || args.view))
-		return message.reply("Need a key and value(s).");
-
 	key = key.toLowerCase();
 
 	if(keys.indexOf(key) === -1)
@@ -38,6 +36,15 @@ function func(message, args){
 	if(args.v || args.view)
 		return message.reply(guildConfigs[message.guild.id][key] || "Not defined.");
 
-	guildConfigs[message.guild.id][key] = values;
+	if(key === "disabledcommands" && values && (typeof(values) === "object" ? values.map((v)=>{return v.toLowerCase()}) : values.toLowerCase()).includes("config"))
+		return message.reply("Nah, I'm too mommy to let you brick this command. :)");
+
+	if(!values)
+		delete guildConfigs[message.guild.id][key]
+	else
+		guildConfigs[message.guild.id][key] = values;
+
+	console.log(guildConfigs[message.guild.id][key])
+	
 	message.reply("Set.");
 }

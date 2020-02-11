@@ -4,7 +4,7 @@ module.exports = {
 	description: "Displays user's profile picture.",
 	category: "general",
 	arguments: {
-		positional: ["mention"],
+		positional: ["id/mention/name/tag"],
 		args: [
 			{short: "s", long: "server"}
 		]
