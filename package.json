@@ -1,6 +1,6 @@
 {
   "name": "Ika3",
-  "version": "3.2.3",
+  "version": "3.2.4",
   "description": "v3 of the Ika Discord bot, built for the DMC Discord server.",
   "main": "index.js",
   "scripts": {
