@@ -1,6 +1,6 @@
 {
   "name": "Ika3",
-  "version": "3.2.2",
+  "version": "3.2.3",
   "description": "v3 of the Ika Discord bot, built for the DMC Discord server.",
   "main": "index.js",
   "scripts": {
@@ -23,10 +23,10 @@
   },
   "homepage": "https://gitlab.com/recette_lemonweed/ika3",
   "dependencies": {
-    "discord.js": "^11.5.1"
+    "discord.js": "^11.5.1",
+    "sqlite": "^3.0.3"
   },
   "optionalDependencies": {
-    "node-opus": "^0.3.3",
-    "sqlite": "^3.0.3"
+    "node-opus": "^0.3.3"
   }
 }

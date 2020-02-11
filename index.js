@@ -12,8 +12,12 @@ global.Commands = Utility.getCommands();
 global.Bot = new Discord.Client();
 Bot.login(Config.token);
 
+global.guildConfigs;
+global.DB;
+
 Bot.on("ready", () => {
 	console.log("ready");
+	Utility.initDB();
 	setInterval(Utility.statusRotate, 10000);
 	Utility.statusRotate();
 });

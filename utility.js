@@ -10,7 +10,7 @@ var statuses = [
 	()=>{return "Ika v"+Package.version},
 	()=>{return "https://ika.eiko.cc"},
 	()=>{return "**help | **invite"},
-	()=>{return Bot.guilds.array().length+" servers, "+Bot.users.array().length+" users, "+commandNumber+" commands."}
+	()=>{return Bot.guilds.size+" servers, "+Bot.users.size+" users, "+commandNumber+" commands."}
 ];
 
 module.exports.statusRotate = function statusRotate(){
@@ -175,18 +175,15 @@ var get = module.exports.get = function(url, obj={
 
 		res.on("end", () => {
 			callback(null, res, bod);
-			console.log("end")
 		});
 
 		res.on("error", (err) => {
-			console.error(err)
 			callback(err, null, null);
 		});
 	});
 }
 
 module.exports.getUser = function(message, args){
-
 	if(message.mentions.users.first())
 		return message.mentions.users.first();
 
@@ -199,4 +196,87 @@ module.exports.getUser = function(message, args){
 		return Bot.users.find((u) => {return u.username == a});
 	}
 	return Bot.users.get(args._[0]);
+}
+
+function saveGuildProperties(id, obj){
+	DB.run("REPLACE INTO config (guild, config) VALUES (?, ?)", id, JSON.stringify(obj));
+}
+
+function guildConfigProxyListener(gobj, id){
+	return {
+		set: function(obj, prop, value){
+			obj[prop] = value;
+			saveGuildProperties(id, gobj);
+		},
+		deleteProperty: function(obj, prop){
+			delete obj[prop];
+			saveGuildProperties(id, gobj);
+			return true;
+		}
+	}
+}
+
+function unmute(guild, user, role){
+	guild = Bot.guilds.get(guild);
+	if(!guild)
+		return;
+	user = guild.members.get(user);
+	if(!user)
+		return;
+	role = guild.roles.get(role);
+	if(!role)
+		return;
+	user.removeRole(role);
+}
+
+function guildConfigProxy(gobj, id){
+	gobj.mutes = new Proxy(gobj.mutes||{}, guildConfigProxyListener(gobj, id));
+	return new Proxy(gobj, guildConfigProxyListener(gobj, id));
+}
+
+function initGuildConfig(){
+	guildConfigs = new Proxy({}, {
+		get: function(obj, prop){
+			if(!obj[prop])
+				obj[prop] = guildConfigProxy({}, prop);
+			return obj[prop];
+		}
+	});
+
+	DB.all("SELECT * FROM config").then((res) => {
+		for(let r of res){
+			let g = guildConfigs[r.guild] = guildConfigProxy(JSON.parse(r.config), r.guild);
+			for(let u of Object.keys(g.mutes)){
+				let timeSince = ((new Date).getTime() - g.mutes[u].start) / 1000;
+				if(timeSince >= g.mutes[u].time){
+					unmute(r.guild, u, g.mutes[u].role);
+					delete g.mutes[u];
+					continue
+				}
+				setTimeout(() => {
+					unmute(r.guild, u, g.mutes[u].role);
+					delete g.mutes[u];
+				}, (g.mutes[u].time - timeSince) * 1000);
+			}
+		}
+	});
+}
+
+module.exports.initDB = function(){ 
+	if(!Fs.existsSync("./ika-db.sqlite"))
+		var init = true;
+
+	require("sqlite").open("./ika-db.sqlite").then((m) => {
+		DB = m;
+
+		if(init){
+			return DB.run('CREATE TABLE "compass" ("id" TEXT, "x" INTEGER,"y" INTEGER, PRIMARY KEY("id"))').then(() => {
+				DB.run('CREATE TABLE "headpats" ("id" TEXT, "pats" INTEGER, "last" INTEGER, PRIMARY KEY("id"))').then(() => {
+					DB.run('CREATE TABLE "config" ("guild" TEXT NOT NULL UNIQUE, "config" TEXT NOT NULL, PRIMARY KEY("guild"))').then(initGuildConfig);
+				});
+			});
+		}
+
+		initGuildConfig();
+	});
 }

@@ -14,11 +14,6 @@ module.exports = {
 	func: func
 };
 
-global.DB;
-require("sqlite").open('./ika-db.sqlite').then((m) => {
-	DB = m;
-});
-
 function clamp(x, ma, mi){
 	return Math.min(Math.max(x, mi), ma);
 }
