@@ -2,7 +2,7 @@ module.exports = {
 	name: "Convert",
 	triggers: ["convert"],
 	description: "Convert units, like 50cm feet",
-	category: "moderation",
+	category: "misc",
 	arguments: {
 		positional: ["value", "output unit"],
 		args: [
@@ -37,7 +37,7 @@ var units = [
 	{names: ["°f", "f", "fahrenheit"], value: 1, type: "temperature"},
 	{names: ["°k", "k", "kelvin"], value: 1, type: "temperature"},
 	// time
-	{names: ["year", "years"], value: 0.01916496, type: "time"},
+	{names: ["years", "year"], value: 0.01916496, type: "time"},
 	{names: ["months", "month"], value: 0.2299795, type: "time"},
 	{names: ["weeks", "week"], value: 1, type: "time"},
 	{names: ["days", "day"], value: 7, type: "time"},
