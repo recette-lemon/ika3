@@ -51,6 +51,13 @@ var units = [
 	{names: ["pints", "pint"], value: 2.113376, type: "volume"},
 	{names: ["dl", "deciliter", "deciliters"], value: 10, type: "volume"},
 	{names: ["ml", "milliliter", "milliliters"], value: 1000, type: "volume"},
+	// energy
+	{names: ["kj", "kilojoule", "kilojoules"], value: 1, type: "energy"},
+	{names: ["j", "joule", "joules"], value: 1000, type: "energy"},
+	{names: ["ev", "electronvolt", "electronvolts"], value: 6.241509e+21, type: "energy"},
+	{names: ["kcal", "calorie", "calories"], value: 0.2390057, type: "energy"},
+	{names: ["btu", "britishthermalunit", "britishthermalunits"], value: 0.9478171, type: "energy"},
+	{names: ["wh", "watthour", "watthours"], value: 0.2777778, type: "energy"},
 ];
 
 var tempConversionTable = {
