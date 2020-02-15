@@ -13,8 +13,13 @@ module.exports = {
 };
 
 function func(message, args){
-	let term = args._.join(" "),
+	let term = args._.join(" "), out;
+	
+	try{
 		out = eval(term);
+	} catch(err){
+		out = err.toString();
+	}
 
 	if(typeof(out) == "object")
 		out = out.constructor.name + "\n" + JSON.stringify(out);
