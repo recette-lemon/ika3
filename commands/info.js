@@ -38,8 +38,8 @@ function func(message, args){
 		embed.addField("Joined at", member.joinedAt.toString().split("+")[0]);
 	} else if(member.id) {
 		embed.addField("Users", message.guild.memberCount, true);
-		embed.addField("Roles", message.guild.roles.array().length, true);
-		embed.addField("Channels", message.guild.channels.array().length, true);
+		embed.addField("Roles", message.guild.roles.size, true);
+		embed.addField("Channels", message.guild.channels.size, true);
 		embed.addField("Owner", message.guild.owner.user.tag, true);
 		embed.addField("Region", message.guild.region, true);
 	}

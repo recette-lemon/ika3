@@ -1,7 +1,6 @@
 const Fs = require("fs");
 const Package = JSON.parse(Fs.readFileSync("package.json"));
-const Https = require("https");
-const Http = require("http");
+const Request = require("request");
 
 var statusIndex = 0;
 var commandNumber;
@@ -154,34 +153,7 @@ module.exports.MessageControls = class MessageControls extends require("events")
 	}
 }
 
-var get = module.exports.get = function(url, obj={
-		headers: {
-			"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"
-		}
-	}, callback){
-	if(!callback){
-		callback = obj;
-		obj = {}
-	}
-
-	let http = url.startsWith("https://") ? Https : Http;
-	http.get(url, obj, (res) => {
-		res.setEncoding('utf8');
-		let bod = "";
-
-		res.on("data", (chunk) => {
-			bod += chunk;
-		});
-
-		res.on("end", () => {
-			callback(null, res, bod);
-		});
-
-		res.on("error", (err) => {
-			callback(err, null, null);
-		});
-	});
-}
+var get = module.exports.get = Request.get;
 
 module.exports.getUser = function(message, args){
 	if(message.mentions.users.first())
