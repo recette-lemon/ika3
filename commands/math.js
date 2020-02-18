@@ -1,7 +1,7 @@
 module.exports = {
 	name: "Math",
 	triggers: ["math", "maths"],
-	description: "Evaluates mathematical expressions. Supports every function and constant in the JS Math object, aswell as bitwise operations and converting from and to different number bases, 0x12, 0o12, 0b12.",
+	description: "Evaluates mathematical expressions. Supports every function and constant in the JS Math object, aswell as bitwise operations and converting from and to different number bases, 0x12, 0o12, 0b12, and bigints with an 'n' suffix.",
 	category: "general",
 	arguments: {
 		positional: ["expression"],
@@ -57,26 +57,34 @@ function isLetters(str){
 }
 
 function isNumber(str){
-	return !isNaN(str);
+	return typeof(str) === "bigint" || !isNaN(str);
 }
 
 function lexer(str){
-	let tokens = str.match(/(\*\*)|([a-zA-Z]+)|((?<![0-9])-?(0[xob])?[0-9.]+)|([^\s])/g); // seperate tokens
+	let tokens = str.match(/(\*\*)|([a-zA-Z]+)|((?<![0-9])-?(0[xob])?[0-9a-fA-F.]+n?)|([^\s])/g); // seperate tokens
 
 	for (let i = 0; i < tokens.length; i++){ // convert numbers into proper numbers
-		if(tokens[i].startsWith("0o")){ // octal
-			tokens[i] = parseInt(tokens[i].split("o")[1], 8); // parseFloat doesnt support radix grrrr
+		if(tokens[i].startsWith("0x")){ // hex
+			tokens[i] = parseInt(tokens[i].split("x")[1], 16); // parseFloat doesnt support radix grrrr
+		}
+
+		else if(tokens[i].startsWith("0o")){ // octal
+			tokens[i] = parseInt(tokens[i].split("o")[1], 8);
 		}
 
 		else if(tokens[i].startsWith("0b")){ // binary
-			tokens[i] = parseInt(tokens[i].split("b")[1], 2); // parseFloat doesnt support radix grrrr
+			tokens[i] = parseInt(tokens[i].split("b")[1], 2);
+		}
+
+		else if(tokens[i].endsWith("n") && isNumber(tokens[i].slice(0, -1))){ // big int
+			tokens[i] = BigInt(tokens[i].slice(0, -1));
 		}
 		
 		else if(isNumber(tokens[i])){ // number
 			tokens[i] = parseFloat(tokens[i]);
 		}
 
-		else if(isLetters(tokens[i]) && tokens[i+1] != "("){ // constant
+		else if(isLetters(tokens[i]) && tokens[i+1] !== "("){ // constant
 			tokens[i] = constants[tokens[i]];
 		}
 	}
@@ -167,7 +175,7 @@ function shuntyarder(tokens){
 		} else
 		
 		if(token === ")"){ // closing brace, apply what we have
-			while( o_stack.length && o_stack[o_stack.length-1] != "(" ){
+			while( o_stack.length && o_stack[o_stack.length-1] !== "(" ){
 				let val2 = v_stack.pop(), // setup values
 					val1 = v_stack.pop(),
 					op   = o_stack.pop();
