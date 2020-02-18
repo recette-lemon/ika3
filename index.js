@@ -68,12 +68,15 @@ Bot.on("message", (message) => {
 			console.error(err);
 
 			let embed = new Discord.RichEmbed({
-				title: "Whoops.",
-				description: "Got an error...",
+				title: "Whoops, got an error...",
+				description: "Either you did the inputs wrong, or its just a feature.",
 				color: Config.embedColour,
 				thumbnail: {
 					url: "https://i.imgur.com/GuIhCoQ.png"
-				}
+				},
+				fields: [
+					{name: err.name, value: err.message}
+				]
 			});
 
 			message.reply({embed});
