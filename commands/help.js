@@ -11,18 +11,16 @@ module.exports = {
 };
 
 function func(message, args){
-	
 	let embed = new Discord.RichEmbed({
-		footer: {
-			text: "You can also get help for each command with -h or --help."
-		},
+		title: "Get help for each command with -h or --help.",
 		thumbnail: {
 			url: "https://i.imgur.com/gv4Itmg.png"
 		},
 		color: Config.embedColour,
 	});
 
-	embed.addField("Help Page", "[Ika.Eiko.Cc](https://ika.eiko.cc/)");
+	embed.addField("Commands", "[Ika.Eiko.cc](https://ika.eiko.cc/)", true);
+	embed.addField("Gits", "[Github](https://github.com/recette-lemon/ika3) [Gitlab](https://gitlab.com/recette_lemonweed/ika3)", true);
 
 	message.channel.send({embed});
 }
