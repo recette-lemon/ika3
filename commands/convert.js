@@ -6,7 +6,13 @@ module.exports = {
 	arguments: {
 		positional: ["value", "output unit"],
 		args: [
-			{short: "u", long: "units"}
+			{short: "l", long: "length"},
+			{short: "w", long: "weight"},
+			{short: "t", long: "temperature"},
+			{short: "k", long: "time"},
+			{short: "v", long: "volume"},
+			{short: "e", long: "energy"},
+			{short: "c", long: "currencies"},
 		]
 	},
 	func: func
@@ -131,11 +137,27 @@ function parseUnit(t){
 	}
 }
 
+function listUnits(type){
+	return units.filter((u) => {return u.type === type}).map((u) => {return u.names[0]}).join(", ");
+}
+
 updateCurrencies();
 
 function func(message, args){
-	if(args.u || args.units)
-		return message.reply(units.map((u) => {return u.names[0]}).join(", "));
+	if(args.l || args.length)
+		return message.reply(listUnits("length"));
+	else if(args.w || args.weight)
+		return message.reply(listUnits("weight"));
+	else if(args.t || args.temperature)
+		return message.reply(listUnits("temperature"));
+	else if(args.k || args.time)
+		return message.reply(listUnits("time"));
+	else if(args.v || args.volume)
+		return message.reply(listUnits("volume"));
+	else if(args.e || args.energy)
+		return message.reply(listUnits("energy"));
+	else if(args.c || args.currencies)
+		return message.reply(listUnits("currency"));
 	
 	updateCurrencies();
 
