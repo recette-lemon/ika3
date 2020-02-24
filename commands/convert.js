@@ -12,6 +12,37 @@ module.exports = {
 	func: func
 };
 
+function updateCurrencies(){
+	if((new Date()).getTime() - lastCurrencyUpdate < 86400000)
+		return;
+
+	Utility.get("https://api.exchangerate-api.com/v4/latest/USD", (err, res, bod) => {
+		let json = JSON.parse(bod);
+		lastCurrencyUpdate = json.time_last_updated * 1000;
+
+		units = units.slice(0, currencyStart); // remove currencies
+
+		for(let c in json.rates){
+			let obj = {names: [c.toLowerCase()], type: "currency"}
+
+			obj.value = json.rates[c];
+
+			if(c === "USD")
+				obj.names.push("$");
+			else if(c === "EUR")
+				obj.names.push("€");
+			else if(c === "GBP")
+				obj.names.push("£");
+			else if(c === "JPY")
+				obj.names.push("¥");
+
+			units.push(obj);
+		}
+	});
+}
+
+var lastCurrencyUpdate;
+
 var units = [
 	// length
 	{names: ["km", "kilometer", "kilometers"], value: 0.001, type: "length"},
@@ -44,6 +75,7 @@ var units = [
 	{names: ["hours", "hour"], value: 168, type: "time"},
 	{names: ["minutes", "minute"], value: 10080, type: "time"},
 	{names: ["seconds", "second"], value: 604800, type: "time"},
+	{names: ["ms", "milliseconds", "millisecond"], value: 604800000, type: "time"},
 	// volume
 	{names: ["gallons", "gallon"], value: 0.2199692, type: "volume"},
 	{names: ["quarts", "quart"], value: 0.8798789, type: "volume"},
@@ -59,6 +91,8 @@ var units = [
 	{names: ["btu", "britishthermalunit", "britishthermalunits"], value: 0.9478171, type: "energy"},
 	{names: ["wh", "watthour", "watthours"], value: 0.2777778, type: "energy"},
 ];
+
+var currencyStart = units.length;
 
 var tempConversionTable = {
 	"c": {
@@ -95,9 +129,13 @@ function parseUnit(t){
 	}
 }
 
+updateCurrencies();
+
 function func(message, args){
 	if(args.u || args.units)
 		return message.reply(units.map((u) => {return u.names[0]}).join(", "));
+	
+	updateCurrencies();
 
 	args._ = args._.filter((a) => {return a.toLowerCase() !== "to"});
 
