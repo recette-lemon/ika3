@@ -13,7 +13,7 @@ module.exports = {
 };
 
 function updateCurrencies(){
-	if((new Date()).getTime() - lastCurrencyUpdate < 86400000)
+	if((new Date()).getTime() - lastCurrencyUpdate < 86400000) // return if less than 24h
 		return;
 
 	Utility.get("https://api.exchangerate-api.com/v4/latest/USD", (err, res, bod) => {
@@ -55,6 +55,8 @@ var units = [
 	{names: ["feet", "foot"], value: 3.28084, type: "length"},
 	{names: ["inches", "inch"], value: 39.37008, type: "length"},
 	{names: ["plancks", "planck"], value: 6.1879273537329E+34, type: "length"},
+	{names: ["metricfeet", "mfoot", "metricfoot", "mfeet"], value: 0.3, type: "length"},
+	{names: ["nauticalmiles", "nmile", "nauticalmile", "nmiles"], value: 0.0005399565, type: "length"},
 	// weight
 	{names: ["tons", "ton"], value: 0.001102311, type: "weight"},
 	{names: ["stones", "stone"], value: 0.157473, type: "weight"},
