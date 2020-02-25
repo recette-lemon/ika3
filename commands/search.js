@@ -11,7 +11,7 @@ module.exports = {
 };
 
 const Request = require("request");
-const URL = "https://duckduckgo.com/lite/";
+const baseURL = "https://duckduckgo.com/?q=";
 
 function func(message, args){
 	let string = args._.join(" ");
@@ -19,33 +19,34 @@ function func(message, args){
 	if(!string)
 		return message.reply("Need something to search for, buddy.");
 
-	Request.post(URL, {
-		form: {
-			q: encodeURIComponent(string),
-			kl: "wt-wt"
-		}
-	}, (err, ress, bod) => {
+	let url = baseURL + encodeURIComponent(string);
 
+	Request.get(url, (err, res, bod) => {
 		if(!bod || err)
 			return message.reply("Ok, something didn't work.");
 
-		let res = bod.match(/(?<=(href=["']))(.+)(?=(["'] class=["']result))/g);
+		let d = "https://duckduckgo.com" + bod.match(/\/d\.js.+(?='\);DDH)/)[0];
 
-		if(!res)
-			return message.reply("Nothing found.");
+		Request.get(d, (err, res, bod) => {
 
-		message.channel.send("Result 1 of "+res.length+" "+res[0]).then(mes=>{
-			let controls = new Utility.MessageControls(mes, message.author),
-				index = 0;
+			let results = JSON.parse(bod.match(/(?<=nrn\('d',).+\).+(?=\);DDG\.deep\.bing)/)[0]);
 
-			controls.on("reaction", r => {
-				if(r.n === 0 && res[index-1])
-					index--;
-				else if(r.n === 1 && res[index+1])
-					index++;
-				else return;
+			if(!results)
+				return message.reply("Nothing found.");
 
-				mes.edit("Result "+(index+1)+" of "+res.length+" "+res[index]);
+			message.channel.send("Result 1 of "+results.length+" "+results[0].u).then(mes=>{
+				let controls = new Utility.MessageControls(mes, message.author),
+					index = 0;
+
+				controls.on("reaction", r => {
+					if(r.n === 0 && results[index-1])
+						index--;
+					else if(r.n === 1 && results[index+1])
+						index++;
+					else return;
+
+					mes.edit("Result "+(index+1)+" of "+results.length+" "+results[index].u);
+				});
 			});
 		});
 	});
