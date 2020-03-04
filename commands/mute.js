@@ -36,7 +36,7 @@ function func(message, args){
 		return message.reply("Mute role not set. Use the config command.");
 
 	let user = message.mentions.members.first(),
-		time = Utility.clamp(parseTime(args._[0][0] === "<" ? args._[1]:args._[0]), 604800, 0) || 600,
+		time = Utility.clamp(parseTime((args._[0][0] === "<" ? args._[1]:args._[0]) || 600), 604800, 0),
 		roleP = guildConfigs[message.guild.id].muterole,
 		role = message.guild.roles.get(roleP) || message.guild.roles.find((r) => {return r.name.toLowerCase() === (Array.isArray(roleP)?roleP.join(" "):roleP).toLowerCase()});
 
