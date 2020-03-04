@@ -1,7 +1,7 @@
 module.exports = {
 	name: "Mute",
 	triggers: ["mute", "dab"],
-	description: "Temporary mute with a role. Use config command to manage role, and length is a format like 2h, 10m, etc.",
+	description: "Temporary mute with a role. Use config command to manage role, and length is a format like 2h, 10m, etc. Default is 10m.",
 	category: "moderation",
 	arguments: {
 		positional: ["mention", "length"],
@@ -36,9 +36,9 @@ function func(message, args){
 		return message.reply("Mute role not set. Use the config command.");
 
 	let user = message.mentions.members.first(),
-		time = Utility.clamp(parseTime(args._[1]), 604800, 0),
+		time = Utility.clamp(parseTime(args._[0][0] === "<" ? args._[1]:args._[0]), 604800, 0) || 600,
 		roleP = guildConfigs[message.guild.id].muterole,
-		role = message.guild.roles.get(roleP) || message.guild.roles.find((r) => {return r.name.toLowerCase() === roleP.join(" ").toLowerCase()});
+		role = message.guild.roles.get(roleP) || message.guild.roles.find((r) => {return r.name.toLowerCase() === (Array.isArray(roleP)?roleP.join(" "):roleP).toLowerCase()});
 
 	if(!(user && time && role))
 		return message.reply("Need a mention and length, in that order, and a valid role id/name set.");
