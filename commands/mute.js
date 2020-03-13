@@ -5,7 +5,9 @@ module.exports = {
 	category: "moderation",
 	arguments: {
 		positional: ["mention", "length"],
-		args: []
+		args: [
+			{short: "r", long: "remaining"}
+		]
 	},
 	func: func
 };
@@ -36,9 +38,33 @@ function func(message, args){
 		return message.reply("Mute role not set. Use the config command.");
 
 	let user = message.mentions.members.first(),
-		time = Utility.clamp(parseTime((args._[0][0] === "<" ? args._[1]:args._[0]) || 600), 604800, 0),
+		time = args._[0] ? Utility.clamp(parseTime((args._[0][0] === "<" ? args._[1]:args._[0]) || 600), 604800, 0) : null,
 		roleP = guildConfigs[message.guild.id].muterole,
 		role = message.guild.roles.get(roleP) || message.guild.roles.find((r) => {return r.name.toLowerCase() === (Array.isArray(roleP)?roleP.join(" "):roleP).toLowerCase()});
+
+	if(args.remaining || args.r){
+		let users;
+		if(user){
+			users = [user.id];
+			if(!guildConfigs[message.guild.id].mutes[user.id])
+				return message.reply("Not muted.");
+		} else {
+			users = Object.keys(guildConfigs[message.guild.id].mutes);
+		}
+
+		let out = users.map(u => {
+			let user = Bot.users.get(u);
+			if(!user) return;
+			let mute = guildConfigs[message.guild.id].mutes[u];
+			let r = mute.time - Math.round(((new Date()).getTime() - mute.start) / 1000);
+			return user.tag + ": " + Utility.toHHMMSS(r) + " of " + Utility.toHHMMSS(mute.time);
+		}).join("\n");
+
+		if(!out)
+			return message.reply("Nobody's muted.");
+
+		return message.reply(out);
+	}
 
 	if(!(user && time && role))
 		return message.reply("Need a mention and length, in that order, and a valid role id/name set.");
