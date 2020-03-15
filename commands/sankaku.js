@@ -1,6 +1,6 @@
 module.exports = {
 	name: "Sankaku",
-	triggers: ["sankaku"],
+	triggers: ["sankaku", "sk"],
 	description: "Browse pics from [Sankaku Channel](https://chan.sankakucomplex.com/). Has shortcuts for tags like order:popular with `--popular` or `--order popular`.",
 	category: "lewd",
 	arguments: {
@@ -23,17 +23,6 @@ var advancedMap = {
 	q: "rating",
 	s: "rating"
 };
-
-function getThumbnail(channel, cache, h, callback){
-	if(cache[h])
-		return callback(cache[h]);
-	let url = thumbnailBase+h+".jpg";
-	channel.send({files: [url]}).then(mes => {
-		let pic = mes.attachments.first().url;
-		cache[h] = pic;
-		callback(pic);
-	});
-}
 
 function func(message, args){
 	let tags = args._;
@@ -72,16 +61,22 @@ function func(message, args){
 			return JSON.parse(r);
 		});
 
-		let hostChannel = Bot.channels.get(Config.fileHostChannelId);
-		let thumbnailCache = {};
 
-		getThumbnail(hostChannel, thumbnailCache, thumbnails[0], pic => {
+		Utility.get("https://chan.sankakucomplex.com/post/show/"+results[0].id, {
+			headers: {
+				"User-Agent": userAgent
+			}
+		}, (err, res, bod) => {
+
+			let url = "https://"+bod.match(/cs.sankakucomplex.com\/data\/..\/..\/.+\..+\?e=.+?(?=")/)[0].replace("amp;", "");
+
+			console.log(url)
 
 			let embed = new Discord.RichEmbed({
 				title: "[Link]",
 				url: postBase+results[0].id,
 				image: {
-					url: pic
+					url: url
 				},
 				color: Config.embedColour,
 				footer: {
@@ -89,25 +84,11 @@ function func(message, args){
 				}
 			});
 
-			message.channel.send({embed}).then(mes => {
-				let controls = new Utility.MessageControls(mes, message.author);
-				let index = 0;
 
-				controls.on("reaction", r => {
-					if(r.n === 0 && results[index-1])
-						index--;
-					else if(r.n === 1 && results[index+1])
-						index++;
-					else return;
+			message.reply({
+				embed
+			})
 
-					getThumbnail(hostChannel, thumbnailCache, thumbnails[index], pic => {
-						embed.url = postBase+results[index].id;
-						embed.image.url = pic;
-						embed.footer.text = (index+1)+" of "+results.length;
-						mes.edit({embed});
-					});
-				});
-			});
 		});
 	});
 }
