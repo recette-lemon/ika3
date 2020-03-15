@@ -1,6 +1,6 @@
 module.exports = {
 	name: "Sankaku",
-	triggers: ["sankaku"],
+	triggers: ["sankaku", "sk"],
 	description: "Browse pics from [Sankaku Channel](https://chan.sankakucomplex.com/). Has shortcuts for tags like order:popular with `--popular` or `--order popular`.",
 	category: "lewd",
 	arguments: {
