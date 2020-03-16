@@ -1,7 +1,7 @@
 module.exports = {
 	name: "Convert",
 	triggers: ["convert"],
-	description: "Convert units, like 50cm feet",
+	description: "Convert units, like `50cm feet`. Currency prices are updated every 24h.",
 	category: "misc",
 	arguments: {
 		positional: ["value", "output unit"],
@@ -22,11 +22,23 @@ function updateCurrencies(){
 	if((new Date()).getTime() - lastCurrencyUpdate < 86400000) // return if less than 24h
 		return;
 
+	units = units.slice(0, currencyStart); // remove currencies
+
+	Utility.get("https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd", (err, res, bod) => {
+		let json = JSON.parse(bod.toLowerCase());
+
+		for(c of json){
+			units.push({
+				names: [c.symbol, c.name.replace(/ /g, "")],
+				value: 1/c.current_price,
+				type: "currency"
+			});
+		}
+	});
+
 	Utility.get("https://api.exchangerate-api.com/v4/latest/USD", (err, res, bod) => {
 		let json = JSON.parse(bod);
 		lastCurrencyUpdate = json.time_last_updated * 1000;
-
-		units = units.slice(0, currencyStart); // remove currencies
 
 		for(let c in json.rates){
 			let obj = {names: [c.toLowerCase()], type: "currency"}
@@ -164,11 +176,11 @@ function func(message, args){
 	args._ = args._.filter((a) => {return a.toLowerCase() !== "to"});
 
 	let l = args._.length > 2,
-		val = parseFloat(args._[0]),
+		val = parseFloat(args._[0]) || 1,
 		u1 = parseUnit(args._[0+l].match(/[^0-9]+/)[0].toLowerCase()),
 		u2 = parseUnit(args._[1+l].match(/[^0-9]+/)[0].toLowerCase());
 
-	if(!(u1 && u2 && !isNaN(val)))
+	if(!(u1 && u2))
 		return message.reply("Nope.");
 
 	if(u1.type !== u2.type)
