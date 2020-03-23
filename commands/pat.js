@@ -53,6 +53,8 @@ function func(message, args){
 
 			if(message.mentions.users.first())
 				embed.description = "Patted "+message.mentions.users.first().username;
+			if(message.mentions.users.first() === Bot.user)
+				embed.description+= " UwU";
 
 			message.channel.send({embed});
 		});
