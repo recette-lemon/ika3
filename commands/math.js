@@ -61,7 +61,7 @@ function isNumber(str){
 }
 
 function lexer(str){
-	let tokens = str.match(/(\*\*)|([a-zA-Z]+)|((?<![0-9])-?(0[xob])?[0-9a-fA-F.]+n?)|([^\s])/g); // seperate tokens
+	let tokens = str.match(/(([*><])\2)|([a-zA-Z]+)|((?<![0-9])-?(0[xob])?[0-9a-fA-F.]+n?)|([^\s])/g); // seperate tokens
 
 	for (let i = 0; i < tokens.length; i++){ // convert numbers into proper numbers
 		if(tokens[i].startsWith("0x")){ // hex
