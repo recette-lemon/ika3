@@ -21,7 +21,7 @@ function func(message, args){
 
 	Request.post(URL, {
 		form: {
-			q: encodeURIComponent(string),
+			q: encodeURIComponent(string).replace(/%20/g, "+"),
 			kl: "wt-wt"
 		}
 	}, (err, ress, bod) => {
