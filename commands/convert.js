@@ -156,20 +156,22 @@ function listUnits(type){
 updateCurrencies();
 
 function func(message, args){
-	if(args.l || args.length)
-		return message.reply(listUnits("length"));
-	else if(args.w || args.weight)
-		return message.reply(listUnits("weight"));
-	else if(args.t || args.temperature)
-		return message.reply(listUnits("temperature"));
-	else if(args.k || args.time)
-		return message.reply(listUnits("time"));
-	else if(args.v || args.volume)
-		return message.reply(listUnits("volume"));
-	else if(args.e || args.energy)
-		return message.reply(listUnits("energy"));
-	else if(args.c || args.currencies)
-		return message.reply(listUnits("currency"));
+	switch(Object.keys(args).pop()){
+		case "l": case "length":
+			return message.reply(listUnits("length"));
+		case "w": case "weight":
+			return message.reply(listUnits("weight"));
+		case "t": case "temperature":
+			return message.reply(listUnits("temperature"));
+		case "k": case "time":
+			return message.reply(listUnits("time"));
+		case "v": case "volume":
+			return message.reply(listUnits("volume"));
+		case "e": case "energy":
+			return message.reply(listUnits("energy"));
+		case "c": case "currency":
+			return message.reply(listUnits("currency"));
+	}
 	
 	updateCurrencies();
 
@@ -177,8 +179,8 @@ function func(message, args){
 
 	let l = args._.length > 2,
 		val = parseFloat(args._[0]) || 1,
-		u1 = parseUnit(args._[0+l].match(/[^0-9]+/)[0].toLowerCase()),
-		u2 = parseUnit(args._[1+l].match(/[^0-9]+/)[0].toLowerCase());
+		u1 = parseUnit(args._[0+l].match(/[^0-9.]+/)[0].toLowerCase()),
+		u2 = parseUnit(args._[1+l].match(/[^0-9.]+/)[0].toLowerCase());
 
 	if(!(u1 && u2))
 		return message.reply("Nope.");
