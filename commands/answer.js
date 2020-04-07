@@ -11,8 +11,14 @@ module.exports = {
 };
 
 function func(message, args){
-	let q = args._.join("").toLowerCase().match(/[a-z]/g);
+	let mes = args._.join(" ");
+	let q = mes.match(/\w/g);
 	if(!q)
 		return message.reply("Nothing to answer.");
-	message.reply(["Yes.", "No."][q.map(c => {return c.charCodeAt(0)}).reduce((a,b) => {return a+b}) % 2]);
+	let n = q.map(c => c.charCodeAt(0)).reduce((a,b) => a+b);
+	let d = mes.split(/\s+or\s+/);
+	let answers = ["Yes.", "No."];
+	if (d[1])
+		answers = d;
+	message.reply(answers[n % answers.length]);
 }
