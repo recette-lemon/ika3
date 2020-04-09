@@ -5,7 +5,6 @@ module.exports = {
 	category: "music",
 	arguments: {
 		positional: ["youtube url"],
-		args: []
 	},
 	func: func
 };

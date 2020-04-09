@@ -5,15 +5,15 @@ module.exports = {
 	category: "misc",
 	arguments: {
 		positional: ["value", "output unit"],
-		args: [
-			{short: "l", long: "length"},
-			{short: "w", long: "weight"},
-			{short: "t", long: "temperature"},
-			{short: "k", long: "time"},
-			{short: "v", long: "volume"},
-			{short: "e", long: "energy"},
-			{short: "c", long: "currencies"},
-		]
+		flags: {
+			length: [false, "l"],
+			weight: [false, "w"],
+			temperature: [false, "t"],
+			time: [false, "k"],
+			volume: [false, "v"],
+			energy: [false, "e"],
+			currency: [false, "c"],
+		}
 	},
 	func: func
 };
@@ -154,26 +154,12 @@ function listUnits(type){
 }
 
 updateCurrencies();
+setInterval(updateCurrencies, 86400000) // 24h
 
 function func(message, args){
-	switch(Object.keys(args).pop()){
-		case "l": case "length":
-			return message.reply(listUnits("length"));
-		case "w": case "weight":
-			return message.reply(listUnits("weight"));
-		case "t": case "temperature":
-			return message.reply(listUnits("temperature"));
-		case "k": case "time":
-			return message.reply(listUnits("time"));
-		case "v": case "volume":
-			return message.reply(listUnits("volume"));
-		case "e": case "energy":
-			return message.reply(listUnits("energy"));
-		case "c": case "currency":
-			return message.reply(listUnits("currency"));
-	}
-	
-	updateCurrencies();
+	let t = Object.keys(args).filter(k=>args[k]===true)[0];
+	if(t)
+		return message.reply(listUnits(t));
 
 	args._ = args._.filter((a) => {return a.toLowerCase() !== "to"});
 

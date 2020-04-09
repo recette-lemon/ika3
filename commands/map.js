@@ -4,12 +4,9 @@ module.exports = {
 	description: "Add yourself and view the [DMC map](https://sylvie.moe/map).",
 	category: "misc",
 	arguments: {
-		positional: [],
-		args: [
-			{
-				short: "t", long: "token"
-			}
-		]
+		args: {
+			token: [false, "t"]
+		}
 	},
 	func: func
 };

@@ -5,7 +5,6 @@ module.exports = {
 	category: "misc",
 	arguments: {
 		positional: ["url"],
-		args: []
 	},
 	func: func
 };

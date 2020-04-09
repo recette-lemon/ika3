@@ -1,16 +1,16 @@
 module.exports = {
 	name: "Math",
 	triggers: ["math", "maths"],
-	description: "Evaluates mathematical expressions. Supports every function and constant in the JS Math object, aswell as bitwise operations and converting from and to different number bases, 0x12, 0o12, 0b12, and bigints with an 'n' suffix.",
+	description: "Evaluates mathematical expressions. Supports every function and constant in the JS Math object, bitwise operations, converting from and to different number bases, 0x12, 0o12, 0b12, and bigints with an 'n' suffix.",
 	category: "general",
 	arguments: {
 		positional: ["expression"],
-		args: [
-			{short: "n", long: "number-base"},
-			{short: "x", long: "hex"},
-			{short: "b", long: "bin"},
-			{short: "o", long: "oct"}
-		]
+		flags: {
+			"number-base": ["10", "n"],
+			"hexadecimal": [false, "hex", "h"],
+			"binary": [false, "bin", "b"],
+			"octal": [false, "oct", "o"]
+		}
 	},
 	func: func
 };
@@ -252,9 +252,8 @@ function evalMaths(str){
 }
 
 function func(message, args){
-	
 	let expression = args._.join(" "),
-		nbase = args.n || args["number-base"] || (args.x||args.hex?16:0) || (args.o||args.oct?8:0) || (args.b||args.bin?2:0) || 10;
+		nbase = (args.x||args.hex?16:0) || (args.o||args.oct?8:0) || (args.b||args.bin?2:0) || args["number-base"];
 
 	if(!expression)
 		return message.reply("Need something to parse.");

@@ -3,10 +3,7 @@ module.exports = {
 	triggers: ["invite"],
 	description: "Provides an invite link.",
 	category: "misc",
-	arguments: {
-		positional: [],
-		args: []
-	},
+	arguments: {},
 	func: func
 };
 
@@ -21,6 +18,8 @@ function func(message){
 		description: "Invite me to a guild.",
 		color: Config.embedColour
 	});
+
+	embed.addField("Host your own instance:", "[Github](https://github.com/recette-lemon/ika3) [Gitlab](https://gitlab.com/recette_lemonweed/ika3)");
 
 	message.channel.send({embed});
 

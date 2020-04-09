@@ -5,7 +5,6 @@ module.exports = {
 	category: "moderation",
 	arguments: {
 		positional: ["role"],
-		args: []
 	},
 	func: func
 };

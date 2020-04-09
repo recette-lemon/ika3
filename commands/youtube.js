@@ -5,7 +5,6 @@ module.exports = {
 	category: "search",
 	arguments: {
 		positional: ["terms"],
-		args: []
 	},
 	func: func
 };

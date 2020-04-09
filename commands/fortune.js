@@ -3,10 +3,7 @@ module.exports = {
 	triggers: ["fortune"],
 	description: "Shows your fortune.",
 	category: "game",
-	arguments: {
-		positional: [],
-		args: []
-	},
+	arguments: {},
 	func: func
 };
 

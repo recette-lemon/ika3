@@ -5,18 +5,16 @@ module.exports = {
 	category: "general",
 	arguments: {
 		positional: ["id/mention/name/tag"],
-		args: [
-			{short: "s", long: "server"}
-		]
+		flags: {
+			server: [false, "s"] 
+		}
 	},
 	func: func
 };
 
 function func(message, args){
-
 	let user = Utility.getUser(message, args) || message.author,
-		s = (args.s || args.server),
-		aviurl = s ? message.guild.iconURL : user.avatarURL || user.defaultAvatarURL;
+		aviurl = args.server ? message.guild.iconURL+"?size=2048" : user.avatarURL || user.defaultAvatarURL;
 
 	let embed = new Discord.RichEmbed({
 		color: Config.embedColour,

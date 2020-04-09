@@ -4,12 +4,9 @@ module.exports = {
 	description: "Pat someone for those sweet numbers.",
 	category: "game",
 	arguments: {
-		positional: [],
-		args: [
-			{
-				short: "l", long: "leaderboard"
-			}
-		]
+		flags: {
+			leaderboard: [false, "l"]
+		}
 	},
 	func: func
 };
@@ -23,7 +20,7 @@ function func(message, args){
 		color: Config.embedColour,
 	});
 
-	if(args.l || args.leaderboard){
+	if(args.leaderboard){
 		delete embed.thumbnail;
 
 		DB.all("SELECT id, pats FROM headpats ORDER BY pats DESC LIMIT 10").then(res => {

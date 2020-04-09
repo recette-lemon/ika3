@@ -1,15 +1,16 @@
 const Fs = require("fs");
 const Package = JSON.parse(Fs.readFileSync("package.json"));
 const Request = require("request");
+const Minimist = require("minimist");
 
 var statusIndex = 0;
 var commandNumber;
 
 var statuses = [
-	()=>{return "Ika v"+Package.version},
-	()=>{return "https://ika.eiko.cc"},
-	()=>{return "**help | **invite"},
-	()=>{return Bot.guilds.size+" servers, "+Bot.users.size+" users, "+commandNumber+" commands."}
+	() => "Ika v"+Package.version,
+	() => "https://ika.eiko.cc",
+	() => "**help | **invite",
+	() => Bot.guilds.size+" servers, "+Bot.users.size+" users, "+commandNumber+" commands."
 ];
 
 module.exports.statusRotate = function statusRotate(){
@@ -20,6 +21,36 @@ module.exports.statusRotate = function statusRotate(){
         }
     });
     statusIndex = (statusIndex + 1) % statuses.length;
+}
+
+module.exports.parseArguments = function(content){
+	let args = content.split(" ");
+	if(!args.length)
+		return [null,null,null];
+
+	let command = args.shift().slice(Config.trigger.length).toLowerCase();
+	let cmd = Commands[command];
+
+	if(!cmd)
+		return [null,null,null];
+
+	let opts = {
+		boolean: ["help"],
+		string: [],
+		alias: {"help": "h"},
+		default: {}
+	}
+
+	for(let a in cmd.arguments.flags){
+		let arg = cmd.arguments.flags[a];
+		opts[typeof(arg[0])].push(a);
+		opts.alias[a] = arg.slice(1);
+		opts.default[a] = arg[0];
+	}
+
+	args = Minimist(args, opts);
+
+	return [args, cmd, command];
 }
 
 module.exports.toHHMMSS = function(t){
@@ -36,6 +67,14 @@ module.exports.toHHMMSS = function(t){
 		seconds = "0"+seconds;
 	let time = hours+':'+minutes+':'+seconds;
 	return time;
+}
+
+module.exports.getDateSince = function(end){
+	let distance = new Date((new Date()).getTime() - end);
+	let y = distance.getUTCFullYear() - 1970;
+	let m = distance.getUTCMonth();
+	let d = distance.getUTCDate() - 1;
+	return (y?y+" Years, ":"")+(m?m+" Months, ":"")+d+" Days";
 }
 
 module.exports.getCommands = function(){
@@ -56,6 +95,35 @@ module.exports.getCommands = function(){
 
 	return commands;
 }
+
+module.exports.getHelpEmbed = function(cmd){
+	let embed = new Discord.RichEmbed({
+		title: cmd.name+" ["+cmd.category+"]",
+		description: cmd.description,
+		color: Config.embedColour
+	});
+
+	embed.addField(Config.trigger+"Triggers", cmd.triggers.join(", "), true);
+
+	if(cmd.arguments.positional)
+		embed.addField("Arguments", cmd.arguments.positional.join(" | "), true);
+	if(cmd.arguments.flags)
+		embed.addField("Flags", Object.keys(cmd.arguments.flags).map(k => {
+			let arg = cmd.arguments.flags[k];
+			return [k].concat(arg.slice(1)).map(a=>(a.length===1?"-":"--")+a).join(" ")+" ["+arg[0]+"]";
+		}).join(", "), true);
+
+	return embed;
+}
+
+module.exports.errorEmbed = new Discord.RichEmbed({
+	title: "Whoops, got an error...",
+	description: "Either you did the inputs wrong, or its just a feature.",
+	color: Config.embedColour,
+	thumbnail: {
+		url: "https://i.imgur.com/GuIhCoQ.png"
+	}
+});
 
 module.exports.getImageLists = function(){
 	let images = {}

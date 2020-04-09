@@ -4,8 +4,7 @@ module.exports = {
 	description: "Image search using DuckDuckGo.",
 	category: "search",
 	arguments: {
-		positional: ["terms"],
-		args: []
+		positional: ["terms"]
 	},
 	func: func
 };

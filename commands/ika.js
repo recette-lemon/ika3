@@ -3,10 +3,7 @@ module.exports = {
 	triggers: ["ika"],
 	description: "Posts a cute image of Ika.",
 	category: "image",
-	arguments: {
-		positional: [],
-		args: []
-	},
+	arguments: {},
 	func: func
 };
 

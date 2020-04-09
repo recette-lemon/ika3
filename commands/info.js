@@ -5,17 +5,16 @@ module.exports = {
 	category: "general",
 	arguments: {
 		positional: ["id/mention/name/tag"],
-		args: [
-			{short: "s", long: "server"}
-		]
+		flags: {
+			server: [false, "s"]
+		}
 	},
 	func: func
 };
 
 function func(message, args){
-
 	let user = Utility.getUser(message, args) || message.author,
-		s = (args.s || args.server),
+		s = args.server,
 		member = message.guild ? message.guild.members.get(user.id) : {};
 	
 	let embed = new Discord.RichEmbed({
@@ -30,12 +29,12 @@ function func(message, args){
 			text: s ? message.guild.id : user.id
 		},
 		fields: [
-			{name: "Created at", value: (s ? message.guild.createdAt : user.createdAt).toString().split("+")[0]}
+			{name: "Created at", value: (s ? message.guild.createdAt : user.createdAt).toString().split("+")[0]+" ("+Utility.getDateSince((s ? message.guild.createdAt : user.createdAt).getTime())+")"}
 		]
 	});
 
 	if(!s && member.id){
-		embed.addField("Joined at", member.joinedAt.toString().split("+")[0]);
+		embed.addField("Joined at", member.joinedAt.toString().split("+")[0]+" ("+Utility.getDateSince(member.joinedAt.getTime())+")");
 	} else if(member.id) {
 		embed.addField("Users", message.guild.memberCount, true);
 		embed.addField("Roles", message.guild.roles.size, true);

@@ -2,10 +2,7 @@ module.exports = {
 	name: "Reaction",
 	description: "Various one-off commands with little purpose.",
 	category: "misc",
-	arguments: {
-		positional: [],
-		args: []
-	},
+	arguments: {},
 	func: func
 };
 

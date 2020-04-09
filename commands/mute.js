@@ -5,9 +5,9 @@ module.exports = {
 	category: "moderation",
 	arguments: {
 		positional: ["mention", "length"],
-		args: [
-			{short: "r", long: "remaining"}
-		]
+		flags: {
+			remaining: [false, "r"]
+		}
 	},
 	func: func
 };
@@ -42,7 +42,7 @@ function func(message, args){
 		roleP = guildConfigs[message.guild.id].muterole,
 		role = message.guild.roles.get(roleP) || message.guild.roles.find((r) => {return r.name.toLowerCase() === (Array.isArray(roleP)?roleP.join(" "):roleP).toLowerCase()});
 
-	if(args.remaining || args.r){
+	if(args.remaining){
 		let users;
 		if(user){
 			users = [user.id];

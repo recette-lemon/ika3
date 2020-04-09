@@ -5,9 +5,9 @@ module.exports = {
 	category: "owner",
 	arguments: {
 		positional: ["code"],
-		args: [
-			{short: "n", long: "no-output"},
-		]
+		flags: {
+			"no-output": [false, "n"]
+		}
 	},
 	func: func
 };
@@ -24,6 +24,6 @@ function func(message, args){
 	if(typeof(out) == "object")
 		out = out.constructor.name + "\n" + JSON.stringify(out);
 
-	if(!(args.n || args["no-output"]))
+	if(!args["no-output"])
 		message.channel.send("```js\n" + out + "```");
 }

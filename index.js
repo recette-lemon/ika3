@@ -1,9 +1,7 @@
 global.Discord = require("discord.js");
-const Minimist = require("./minimist.js");
-const Fs = require("fs");
 
+global.Config = JSON.parse(require("fs").readFileSync("config.json"))
 global.Utility = require("./utility.js");
-global.Config = JSON.parse(Fs.readFileSync("config.json"))
 
 global.Images = Utility.getImageLists();
 
@@ -14,10 +12,10 @@ Bot.login(Config.token);
 
 global.guildConfigs;
 global.DB;
+Utility.initDB();
 
 Bot.on("ready", () => {
 	console.log("ready");
-	Utility.initDB();
 	setInterval(Utility.statusRotate, 10000);
 	Utility.statusRotate();
 });
@@ -31,56 +29,25 @@ Bot.on("message", (message) => {
 	if(!message.content.startsWith(Config.trigger) || message.author.bot)
 		return;
 
-	let args = Minimist(message.content.split(" "));
-	let command = args._.splice(0, 1)[0].slice(Config.trigger.length).toLowerCase();
+	let [args, cmd, command] = Utility.parseArguments(message.content);
 
-	console.log(command, args);
+	if(!cmd)
+		return;
 
-	let cmd = Commands[command];
-
-	if(cmd){
-		if(args.h || args.help){
-			let embed = new Discord.RichEmbed({
-				title: cmd.name,
-				description: cmd.description,
-				color: Config.embedColour
-			});
-
-			embed.addField("Triggers", cmd.triggers.map(t => {return Config.trigger.split("").join("\\") + t}).join(", "), true);
-
-			if(cmd.arguments.positional[0])
-				embed.addField("Arguments", cmd.arguments.positional.join(" "), true);
-			if(cmd.arguments.args[0])
-				embed.addField("Flags", cmd.arguments.args.map(a => {return "-"+a.short+" --"+a.long}).join(", "), true);
-
-			return message.reply({embed});
-		}
-
-		if(cmd.category === "owner" && message.author.id != Config.ownerId)
-			return;
-
-		if(message.guild && guildConfigs[message.guild.id].disabledcommands && guildConfigs[message.guild.id].disabledcommands.includes(cmd.name.toLowerCase()) && cmd.category !== "owner")
-			return;
-
-		try{
-			cmd.func(message, args, command);
-		} catch(err){
-			console.error(err);
-
-			let embed = new Discord.RichEmbed({
-				title: "Whoops, got an error...",
-				description: "Either you did the inputs wrong, or its just a feature.",
-				color: Config.embedColour,
-				thumbnail: {
-					url: "https://i.imgur.com/GuIhCoQ.png"
-				},
-				fields: [
-					{name: err.name, value: err.message}
-				]
-			});
-
-			message.reply({embed});
-		}
+	if(args.h || args.help){
+		return message.reply({embed: Utility.getHelpEmbed(cmd)});
 	}
 
+	if(cmd.category === "owner" && message.author.id != Config.ownerId)
+		return;
+
+	if(message.guild && guildConfigs[message.guild.id].disabledcommands && guildConfigs[message.guild.id].disabledcommands.includes(cmd.name.toLowerCase()) && cmd.category !== "owner")
+		return;
+
+	try{
+		cmd.func(message, args, command);
+	} catch(err){
+		console.error(command, args, err);
+		message.reply({embed: Utility.errorEmbed})
+	}
 });

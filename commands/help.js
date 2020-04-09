@@ -3,10 +3,7 @@ module.exports = {
 	triggers: ["help"],
 	description: "Help message.",
 	category: "misc",
-	arguments: {
-		positional: [],
-		args: []
-	},
+	arguments: {},
 	func: func
 };
 

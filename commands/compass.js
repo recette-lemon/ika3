@@ -5,11 +5,9 @@ module.exports = {
 	category: "misc",
 	arguments: {
 		positional: ["x", "y"],
-		args: [
-			{
-				short: "a", long: "average"
-			}
-		]
+		flags: {
+			"average": [false, "a"]
+		}
 	},
 	func: func
 };
@@ -57,7 +55,7 @@ function func(message, args){
 			return u[0];
 		});
 		
-		if(args.a || args.average){
+		if(args.average){
 			let total = users.reduce((a,b) => {return ["", a[1]+b[1], a[2]+b[2]]});
 			users = [[message.guild.name, (total[1]/users.length).toFixed(1), (total[2]/users.length).toFixed(1)]];
 			embed.title = "X:"+users[0][1]+" Y:"+users[0][2];

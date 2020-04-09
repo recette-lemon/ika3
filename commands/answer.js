@@ -5,7 +5,6 @@ module.exports = {
 	category: "game",
 	arguments: {
 		positional: ["question"],
-		args: []
 	},
 	func: func
 };
