@@ -103,14 +103,14 @@ module.exports.getHelpEmbed = function(cmd){
 		color: Config.embedColour
 	});
 
-	embed.addField(Config.trigger+"Triggers", cmd.triggers.join(", "), true);
+	embed.addField(Config.trigger+"Triggers", cmd.triggers.sort().join(", "), true);
 
 	if(cmd.arguments.positional)
-		embed.addField("Arguments", cmd.arguments.positional.join(" | "), true);
+		embed.addField("Arguments", cmd.arguments.positional.sort().join(" | "), true);
 	if(cmd.arguments.flags)
-		embed.addField("Flags", Object.keys(cmd.arguments.flags).map(k => {
+		embed.addField("Flags", Object.keys(cmd.arguments.flags).sort().map(k => {
 			let arg = cmd.arguments.flags[k];
-			return [k].concat(arg.slice(1)).map(a=>(a.length===1?"-":"--")+a).join(" ")+" ["+arg[0]+"]";
+			return [k].concat(arg.slice(1).sort((a,b)=>b.length-a.length)).map(a=>(a.length===1?"-":"--")+a).join(" ")+(arg[0]?(" ["+arg[0]+"]"):"");
 		}).join(", "), true);
 
 	return embed;
