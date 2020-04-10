@@ -87,13 +87,17 @@ module.exports.getCommands = function(){
 		let loc = "./commands/"+file;
 		delete require.cache[require.resolve(loc)];
 
-		let cmd = require(loc)
+		let cmd = require(loc);
 		for(t of cmd.triggers){
 			commands[t] = cmd;
 		}
 	}
 
 	return commands;
+}
+
+module.exports.getCommandsNumber = function(){
+	return commandNumber
 }
 
 module.exports.getHelpEmbed = function(cmd){
