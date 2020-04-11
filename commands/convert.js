@@ -27,7 +27,7 @@ function updateCurrencies(){
 	Utility.get("https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd", (err, res, bod) => {
 		let json = JSON.parse(bod.toLowerCase());
 
-		for(c of json){
+		for(let c of json){
 			units.push({
 				names: [c.symbol, c.name.replace(/ /g, "")],
 				value: 1/c.current_price,
@@ -41,7 +41,7 @@ function updateCurrencies(){
 		lastCurrencyUpdate = json.time_last_updated * 1000;
 
 		for(let c in json.rates){
-			let obj = {names: [c.toLowerCase()], type: "currency"}
+			let obj = {names: [c.toLowerCase()], type: "currency"};
 
 			obj.value = json.rates[c];
 
@@ -127,7 +127,7 @@ var tempConversionTable = {
 		"f": (x => 1.8 * (x - 273.15) + 23),
 		"c": (x => x - 273.15)
 	}
-}
+};
 
 function convert(unitIn, unitOut, value){
 	if(unitIn.type === "temperature"){
@@ -150,23 +150,25 @@ function parseUnit(t){
 }
 
 function listUnits(type){
-	return units.filter((u) => {return u.type === type}).map((u) => {return u.names[0]}).join(", ");
+	return units.filter((u) => {return u.type === type}).map((u) => u.names[0]).join(", ");
 }
 
 updateCurrencies();
-setInterval(updateCurrencies, 86400000) // 24h
+setInterval(updateCurrencies, 86400000); // 24h
 
 function func(message, args){
 	let t = Object.keys(args).filter(k=>args[k]===true)[0];
 	if(t)
 		return message.reply(listUnits(t));
 
-	args._ = args._.filter((a) => {return a.toLowerCase() !== "to"});
+	args._ = args._.filter((a) => a.toLowerCase() !== "to");
 
 	let l = args._.length > 2,
-		val = parseFloat(args._[0]) || 1,
-		u1 = parseUnit(args._[0+l].match(/[^0-9.]+/)[0].toLowerCase()),
-		u2 = parseUnit(args._[1+l].match(/[^0-9.]+/)[0].toLowerCase());
+		val = parseFloat(args._[0].replace(/,/g, "")) || 1,
+		u1 = parseUnit(args._[0+l].match(/[^0-9.,]+/)[0].toLowerCase()),
+		u2 = parseUnit(args._[1+l].match(/[^0-9.,]+/)[0].toLowerCase());
+
+	console.log(args._[0].replace(/,/, ""), val)
 
 	if(!(u1 && u2))
 		return message.reply("Nope.");
@@ -174,5 +176,5 @@ function func(message, args){
 	if(u1.type !== u2.type)
 		return message.reply("Not the same type.");
 
-	message.reply(convert(u1, u2, val).toFixed(5).replace(/\.?0+$/, "")+(u2.names[0].length>2?" ":"")+u2.names[0]);
+	message.reply(convert(u1, u2, val).toLocaleString("en")+(u2.names[0].length>2?" ":"")+u2.names[0]);
 }
