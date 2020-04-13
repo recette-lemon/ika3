@@ -46,7 +46,7 @@ function func(message, args){
 		let pats = res ? res.pats + 1 : 1;
 
 		DB.run("REPLACE INTO headpats (id, pats) VALUES (?, ?)", message.author.id, pats).then(() => {
-			embed.title = message.author.username+" has given "+pats+" headpats.";
+			embed.title = message.author.username+" has given "+pats+" headpat"+(pats == 1 ? "." : "s.");
 
 			if(message.mentions.users.first())
 				embed.description = "Patted "+message.mentions.users.first().username;
