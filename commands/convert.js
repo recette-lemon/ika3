@@ -6,13 +6,15 @@ module.exports = {
 	arguments: {
 		positional: ["value", "output unit"],
 		flags: {
-			length: [false, "l"],
-			weight: [false, "w"],
-			temperature: [false, "t"],
-			time: [false, "k"],
-			volume: [false, "v"],
-			energy: [false, "e"],
-			currency: [false, "c"],
+			list: {
+				length: [false, "l"],
+				weight: [false, "w"],
+				temperature: [false, "t"],
+				time: [false, "k"],
+				volume: [false, "v"],
+				energy: [false, "e"],
+				currency: [false, "c"],
+			}
 		}
 	},
 	func: func
@@ -157,9 +159,8 @@ updateCurrencies();
 setInterval(updateCurrencies, 86400000); // 24h
 
 function func(message, args){
-	let t = Object.keys(args).filter(k=>args[k]===true)[0];
-	if(t)
-		return message.reply(listUnits(t));
+	if(args.list)
+		return message.reply(listUnits(args.list));
 
 	args._ = args._.filter((a) => a.toLowerCase() !== "to");
 

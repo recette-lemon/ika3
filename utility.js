@@ -23,6 +23,12 @@ module.exports.statusRotate = function statusRotate(){
     statusIndex = (statusIndex + 1) % statuses.length;
 }
 
+function parseArg(arg, a, opts){
+	opts[typeof(arg[0])].push(a);
+	opts.alias[a] = arg.slice(1);
+	opts.default[a] = arg[0];
+}
+
 module.exports.parseArguments = function(content){
 	let args = content.split(" ");
 	if(!args.length)
@@ -39,16 +45,34 @@ module.exports.parseArguments = function(content){
 		string: [],
 		alias: {"help": "h"},
 		default: {}
-	}
+	};
+
+	let pools = {};
 
 	for(let a in cmd.arguments.flags){
 		let arg = cmd.arguments.flags[a];
-		opts[typeof(arg[0])].push(a);
-		opts.alias[a] = arg.slice(1);
-		opts.default[a] = arg[0];
+		if(Array.isArray(arg)){
+			parseArg(arg, a, opts);
+			continue;
+		}
+		pools[a] = arg;
+		for(let aa in arg){
+			parseArg(arg[aa], aa, opts);
+		}
 	}
 
 	args = Minimist(args, opts);
+
+	for(let pool in pools){
+		for(let arg in pools[pool]){
+			for(let a of [arg].concat(pools[pool][arg].slice(1))){
+				if(args[a]){
+					args[pool] = a;
+					break;
+				}
+			}
+		}
+	}
 
 	return [args, cmd, command];
 }
@@ -100,6 +124,12 @@ module.exports.getCommandsNumber = function(){
 	return commandNumber
 }
 
+function getFlagString(arg, k){
+	return [k].concat(arg.slice(1)).sort((a,b)=>{
+		return b.length-a.length;
+	}).map(a => (a.length === 1 ? ("-"+a) : ("--"+a))).join(" ");
+}
+
 module.exports.getHelpEmbed = function(cmd){
 	let embed = new Discord.RichEmbed({
 		title: cmd.name+" ["+cmd.category+"]",
@@ -111,11 +141,16 @@ module.exports.getHelpEmbed = function(cmd){
 
 	if(cmd.arguments.positional)
 		embed.addField("Arguments", cmd.arguments.positional.sort().join(" | "), true);
-	if(cmd.arguments.flags)
-		embed.addField("Flags", Object.keys(cmd.arguments.flags).sort().map(k => {
+	if(cmd.arguments.flags){
+		embed.addField("Flags", Object.keys(cmd.arguments.flags).map(k => {
 			let arg = cmd.arguments.flags[k];
-			return [k].concat(arg.slice(1).sort((a,b)=>b.length-a.length)).map(a=>(a.length===1?"-":"--")+a).join(" ")+(arg[0]?(" ["+arg[0]+"]"):"");
-		}).join(", "), true);
+			if(Array.isArray(arg))
+				return getFlagString(arg, k) + (arg[0] ? (" *["+arg[0]+"]*") : "");
+			return k + ":\n" + Object.keys(arg).map(k => {
+				return "­　" + getFlagString(arg[k], k);
+			}).join("\n");
+		}).sort().join("\n"));
+	}
 
 	return embed;
 }

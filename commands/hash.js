@@ -6,29 +6,32 @@ module.exports = {
 	arguments: {
 		positional: ["string"],
 		flags: {
-			sha1: [false],
-			sha224: [false],
-			sha256: [false],
-			sha384: [false],
-			sha512: [false],
-			md5: [false],
-			hex: [false],
-			base64: [false],
-			ascii: [false],
-			utf8: [false],
-			binary: [false]
+			algorithm: {
+				sha1: [false],
+				sha224: [false],
+				sha256: [false],
+				sha384: [false],
+				sha512: [false],
+				md5: [false],
+			},
+			output: {
+				hex: [false],
+				base64: [false, "b64"],
+				ascii: [false],
+				utf8: [false],
+				binary: [false]
+			}
 		}
 	},
 	func
 };
 
 var crypto = require("crypto");
-var outputFormats = ["hex", "base64", "ascii", "utf8", "binary"];
 
 function func(message, args){
 	let str = args._.join(" ");
-	let algorithm = Object.keys(args).find(k=>args[k]===true&&outputFormats.indexOf(k)===-1) || "sha256";
-	let output = Object.keys(args).find(k=>args[k]===true&&outputFormats.indexOf(k)!==-1) || "hex";
+	let algorithm = args.algorithm || "sha256";
+	let output = args.output || "hex";
 
 	if(!str)
 		return message.reply("I need a string to hash.");
