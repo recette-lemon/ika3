@@ -12,7 +12,7 @@ module.exports = {
 var Request = require("request");
 
 function func(message, args){
-	let url = args._[0]
+	let url = args._[0];
 	if(!url)
 		return message.reply("Need something to shorten.");
 

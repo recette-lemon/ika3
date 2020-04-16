@@ -1,7 +1,7 @@
 global.Discord = require("discord.js");
 
-global.Config = JSON.parse(require("fs").readFileSync("config.json"))
-global.Utility = require("./utility.js");
+global.Config = JSON.parse(require("fs").readFileSync("config.json"));
+global.Utility = require("./utility");
 
 global.Images = Utility.getImageLists();
 
@@ -10,8 +10,8 @@ global.Commands = Utility.getCommands();
 global.Bot = new Discord.Client();
 Bot.login(Config.token);
 
-global.guildConfigs;
-global.DB;
+global.guildConfigs = null;
+global.DB = null;
 Utility.initDB();
 
 Bot.on("ready", () => {
@@ -48,6 +48,6 @@ Bot.on("message", (message) => {
 		cmd.func(message, args, command);
 	} catch(err){
 		console.error(command, args, err);
-		message.reply({embed: Utility.errorEmbed})
+		message.reply({embed: Utility.errorEmbed});
 	}
 });

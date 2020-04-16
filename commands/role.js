@@ -28,7 +28,7 @@ function func(message, args){
 
 	if(args.list)
 		return message.reply(message.guild.roles.filter(role => {
-			return startRole.position > role.position && endRole.position < role.position
+			return startRole.position > role.position && endRole.position < role.position;
 		}).map(r=>r.name).sort((a,b)=>a.toLowerCase()>b.toLowerCase()?1:-1).join(", ") || "No roles.");
 
 	if(!roleName)

@@ -11,7 +11,7 @@ module.exports = {
 
 function loop(channel, numbers, i){
 	if(numbers[i]){
-		return channel.bulkDelete(numbers[i]).then((mes) => {
+		return channel.bulkDelete(numbers[i]).then(() => {
 			setTimeout(() => {
 				loop(channel, numbers, i+1);
 			}, 2000);

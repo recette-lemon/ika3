@@ -136,9 +136,7 @@ function convert(unitIn, unitOut, value){
 		value = tempConversionTable[unitIn.names[1]][unitOut.names[1]](value);
 	}
 
-	let out = (unitOut.value / unitIn.value) * value;
-	
-	return out;
+	return (unitOut.value / unitIn.value) * value;
 }
 
 function parseUnit(t){
@@ -152,7 +150,7 @@ function parseUnit(t){
 }
 
 function listUnits(type){
-	return units.filter((u) => {return u.type === type}).map((u) => u.names[0]).join(", ");
+	return units.filter((u) => u.type === type).map((u) => u.names[0]).join(", ");
 }
 
 updateCurrencies();
@@ -168,8 +166,6 @@ function func(message, args){
 		val = parseFloat(args._[0].replace(/,/g, "")) || 1,
 		u1 = parseUnit(args._[0+l].match(/[^0-9.,]+/)[0].toLowerCase()),
 		u2 = parseUnit(args._[1+l].match(/[^0-9.,]+/)[0].toLowerCase());
-
-	console.log(args._[0].replace(/,/, ""), val)
 
 	if(!(u1 && u2))
 		return message.reply("Nope.");

@@ -10,7 +10,7 @@ var reactions = {
 	// [message, image]
 };
 
-module.exports.triggers = Object.keys(reactions).map(r => {return r.split(" ")[0]});
+module.exports.triggers = Object.keys(reactions).map(r => r.split(" ")[0]);
 
 function func(message, args, command){
 	let reaction = reactions[command];

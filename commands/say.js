@@ -11,7 +11,7 @@ module.exports = {
 
 function func(message, args){
 	if(!args._[0])
-		return message.reply("Fucking give me something to say, you retard.");
+		return message.reply("Give me something to say.");
 
 	message.channel.send(args._.join(" "));
 	message.delete();

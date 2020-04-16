@@ -11,6 +11,10 @@ module.exports = {
 	func: func
 };
 
+function patsToString(res, i, total){
+	return "#"+(i+1)+" "+((Bot.users.get(res[i].id)||{}).username||"?")+": "+res[i].pats+" ("+(res[i].pats/total*100).toFixed(1)+"%)";
+}
+
 function func(message, args){
 
 	let embed = new Discord.RichEmbed({
@@ -24,13 +28,13 @@ function func(message, args){
 		delete embed.thumbnail;
 
 		DB.all("SELECT id, pats FROM headpats ORDER BY pats DESC LIMIT 10").then(res => {
-			DB.get("SELECT TOTAL(pats), AVG(pats), COUNT(pats) from headpats").then(sum => { // need to reduce to one query if possible
+			DB.get("SELECT TOTAL(pats), AVG(pats), COUNT(pats) from headpats").then(sum => {
 
 				embed.title = sum["TOTAL(pats)"]+" total pats, "+sum["COUNT(pats)"]+" patters, "+sum["AVG(pats)"].toFixed(1)+" average.";
 
-				for(var i = 0; i < res.length; i += 2){
-					let u1 = "#"+(i+1)+" "+((Bot.users.get(res[i].id)||{}).username||"?")+": "+res[i].pats,
-						u2 = "#"+(i+2)+" "+((Bot.users.get(res[i+1].id)||{}).username||"?")+": "+res[i+1].pats;
+				for(let i = 0; i < res.length; i += 2){
+					let u1 = res[i] ? patsToString(res, i, sum["TOTAL(pats)"]) : "­";
+					let u2 = res[i+1] ? patsToString(res, i+1, sum["TOTAL(pats)"]) : "­";
 					embed.addField(u1, u2);
 				}
 
