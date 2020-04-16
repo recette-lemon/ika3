@@ -21,6 +21,3 @@ module.exports.statusRotate = function statusRotate(){
 module.exports.clamp = function(n, ma, mi){
 	return Math.min(Math.max(n, mi), ma);
 };
-
-
-module.exports.nigger = 3;
