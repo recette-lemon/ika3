@@ -13,6 +13,7 @@ module.exports = {
 				sha384: [false],
 				sha512: [false],
 				md5: [false],
+				bobo: [false]
 			},
 			output: {
 				hex: [false],
@@ -26,17 +27,33 @@ module.exports = {
 	func
 };
 
-var crypto = require("crypto");
+let crypto = require("crypto");
+
+function bobo(str){ // contributed by bobo
+	let hash = 0;
+	if (str.length == 0)
+		return hash;
+	for (let i = 0; i < str.length; i++) {
+		let char = str.charCodeAt(i);
+		hash = ((hash<<5)-hash)+char;
+		hash = hash & hash;
+	}
+	return hash;
+}
 
 function func(message, args){
 	let str = args._.join(" ");
 	let algorithm = args.algorithm || "sha256";
 	let output = args.output || "hex";
+	let hash;
 
 	if(!str)
 		return message.reply("I need a string to hash.");
 
-	let hash = crypto.createHash(algorithm).update(str).digest().toString(output);
+	if(args.algorithm = "bobo")
+		hash = bobo(str);
+	else
+		hash = crypto.createHash(algorithm).update(str).digest().toString(output);
 
 	if(!hash)
 		return message.reply("Couldn't get hash for some reason. Probably *your* fault.");
