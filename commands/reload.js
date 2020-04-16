@@ -14,7 +14,7 @@ module.exports = {
 };
 
 function imgLength(){
-	return Object.values(Images).reduce((a,c) => (typeof(c) == "number" ? c : c.length)+a.length);
+	return Object.values(Images).map(x=>x.length).reduce((c,n) => c+n);
 }
 
 function func(message, args){
@@ -31,7 +31,7 @@ function func(message, args){
 	}
 	if(args.images){
 		let lastN = imgLength();
-		global.Images = Utility.getImageLists();
+		Images = Utility.getImageLists();
 		out += `Reloaded images (${lastN}) => (${imgLength()}) images.\n`;
 	}
 
