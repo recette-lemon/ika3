@@ -40,11 +40,9 @@ function func(message, args){
 		return message.reply("Nah, I'm too mommy to let you brick this command. :)");
 
 	if(!values)
-		delete guildConfigs[message.guild.id][key]
+		delete guildConfigs[message.guild.id][key];
 	else
 		guildConfigs[message.guild.id][key] = values;
-
-	console.log(guildConfigs[message.guild.id][key])
 	
 	message.reply("Set.");
 }

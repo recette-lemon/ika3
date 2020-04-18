@@ -1,20 +1,5 @@
 let Fs = require("fs");
 
-module.exports.getUser = function(message, args){
-	if(message.mentions.users.first())
-		return message.mentions.users.first();
-
-	let a = args._.join(" ");
-
-	if(isNaN(a)){
-		if(a.includes("#")){
-			return Bot.users.find((u) => u.tag == a);
-		}
-		return Bot.users.find((u) => u.username == a);
-	}
-	return Bot.users.get(args._[0]);
-};
-
 function saveGuildProperties(id, obj){
 	DB.run("REPLACE INTO config (guild, config) VALUES (?, ?)", id, JSON.stringify(obj));
 }

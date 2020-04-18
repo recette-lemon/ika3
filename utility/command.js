@@ -145,3 +145,18 @@ module.exports.imageCommand = function(message, folder){
 		}],
 	});
 };
+
+module.exports.getUser = function(message, args){
+	if(message.mentions.users.first())
+		return message.mentions.users.first();
+
+	let a = args._.join(" ");
+
+	if(isNaN(a)){
+		if(a.includes("#")){
+			return Bot.users.find((u) => u.tag == a);
+		}
+		return Bot.users.find((u) => u.username == a);
+	}
+	return Bot.users.get(args._[0]);
+};
