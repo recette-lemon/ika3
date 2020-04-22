@@ -6,7 +6,8 @@ module.exports = {
 	arguments: {
 		positional: ["mention", "length"],
 		flags: {
-			remaining: [false, "r"]
+			remaining: [false, "r"],
+			unmute: [false, "u"]
 		}
 	},
 	func: func
@@ -40,7 +41,7 @@ function func(message, args){
 	let user = message.mentions.members.first(),
 		time = args._[0] ? Utility.clamp(parseTime((args._[0][0] === "<" ? args._[1]:args._[0]) || 600), 604800, 0) : null,
 		roleP = guildConfigs[message.guild.id].muterole,
-		role = message.guild.roles.get(roleP) || message.guild.roles.find((r) => {return r.name.toLowerCase() === (Array.isArray(roleP)?roleP.join(" "):roleP).toLowerCase()});
+		role = message.guild.roles.get(roleP) || message.guild.roles.find((r) => r.name.toLowerCase() === (Array.isArray(roleP)?roleP.join(" "):roleP).toLowerCase());
 
 	if(args.remaining){
 		let users;
@@ -66,11 +67,16 @@ function func(message, args){
 		return message.reply(out);
 	}
 
-	if(!(user && time && role))
+	if(!(user && role))
 		return message.reply("Need a mention and length, in that order, and a valid role id/name set.");
 
 	if(user.highestRole.comparePositionTo(message.member.highestRole) >= 0)
 		return message.reply("You arent higher than them in the role list.");
+
+	if(args.unmute){
+		unmute(user, role, guildConfigs[message.guild.id].mutes);
+		return message.reply("User unmuted.");
+	}
 
 	guildConfigs[message.guild.id].mutes[user.id] = {
 		time,

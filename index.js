@@ -12,12 +12,12 @@ Bot.login(Config.token);
 
 global.guildConfigs = null;
 global.DB = null;
-Utility.initDB();
 
 Bot.on("ready", () => {
 	console.log("ready");
 	setInterval(Utility.statusRotate, 10000);
 	Utility.statusRotate();
+	Utility.initDB();
 });
 
 Bot.on("guildMemberAdd", (member) => {
