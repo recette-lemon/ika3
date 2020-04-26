@@ -13,10 +13,6 @@ module.exports = {
 	func: func
 };
 
-function imgLength(){
-	return Object.values(Images).map(x=>x.length).reduce((c,n) => c+n);
-}
-
 function func(message, args){
 	let out = "";
 	if(args.commands){
@@ -30,9 +26,12 @@ function func(message, args){
 		out += `Reloaded utility (${lastN}) => (${Object.keys(Utility).length}) functions.\n`;
 	}
 	if(args.images){
-		let lastN = imgLength();
+		let lastImgs = Object.keys(Images).map(k => Images[k].length);
 		Images = Utility.getImageLists();
-		out += `Reloaded images (${lastN}) => (${imgLength()}) images.\n`;
+		let currentImgs = Object.keys(Images).map(k => Images[k].length);
+		out += "Reloaded images {\n" + Object.keys(Images).map((k, i) => {
+			return "\t" + k + ": " + lastImgs[i] + " => " + currentImgs[i];
+		}).join(",\n") + "\n}\n";
 	}
 
 	message.reply(out || "Nothing reloaded.");

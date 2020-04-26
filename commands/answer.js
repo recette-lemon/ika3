@@ -18,6 +18,6 @@ function func(message, args){
 	let d = mes.split(/\s+or\s+/);
 	let answers = ["Yes.", "No."];
 	if (d[1])
-		answers = d.map(x => x.toLowerCase()).sort();
+		answers = d.map(x => x.toLowerCase().trim()).sort();
 	message.reply(answers[n % answers.length]);
 }
