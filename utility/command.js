@@ -129,7 +129,7 @@ module.exports.imageCommand = function(message, folder){
 		ext = file.split(".").pop(),
 		name = folder+"-"+(n+1)+"."+ext;
 
-	let embed = ~["png", "jpg", "jpeg", "gif", "webp"].indexOf(ext.toLowerCase()) ? new Discord.RichEmbed({
+	let embed = isImageExt(ext) ? new Discord.RichEmbed({
 		color: Config.embedColour,
 		image: {url: "attachment://"+name},
 		footer: {
@@ -159,4 +159,29 @@ module.exports.getUser = function(message, args){
 		return Bot.users.find((u) => u.username == a);
 	}
 	return Bot.users.get(args._[0]);
+};
+
+function isImageExt(file){
+	return ~["png", "jpg", "jpeg", "gif", "webp"].indexOf(file.split(".").pop());
+}
+
+function parseMessageForImages(message){
+	if(message.attachments.first())
+		return message.attachments.first().url;
+	if(message.embeds[0] && message.embeds[0].image)
+		return message.embeds[0].image.url;
+	let args = message.content.split(" ");
+	return args.find(a => a.startsWith("http") && isImageExt(a));
+}
+
+module.exports.getImage = function(message){ // still need to expand to cover more cases
+	let url = parseMessageForImages(message);
+	if(!url){
+		for(let mes of message.channel.messages.array().reverse()){
+			url = parseMessageForImages(mes);
+			if(url)
+				return url;
+		}
+	}
+	return url;
 };
