@@ -22,6 +22,7 @@ function func(message, args){
 	if(args.commands){
 		let lastN = Utility.getCommandsNumber();
 		Commands = Utility.getCommands();
+		Utility.updateGitHash();
 		out = `Reloaded commands (${lastN}) => (${Utility.getCommandsNumber()}) commands.\n`;
 	}
 	if(args.utility){
