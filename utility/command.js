@@ -1,10 +1,37 @@
+module.exports.parseMessage = function(message){
+	if(!message.content.startsWith(Config.trigger) || message.author.bot)
+		return;
+
+	let [args, cmd, command] = parseArguments(message.content);
+
+	if(!cmd)
+		return;
+
+	if(args.h || args.help){
+		return message.reply({embed: Utility.getHelpEmbed(cmd)});
+	}
+
+	if(cmd.category === "owner" && message.author.id != Config.ownerId)
+		return;
+
+	if(message.guild && guildConfigs[message.guild.id].disabledcommands && guildConfigs[message.guild.id].disabledcommands.includes(cmd.name.toLowerCase()) && cmd.category !== "owner")
+		return;
+
+	try{
+		cmd.func(message, args, command);
+	} catch(err){
+		console.error(command, args, err);
+		message.reply({embed: Utility.errorEmbed});
+	}
+};
+
 function parseArg(arg, a, opts){
 	opts[typeof(arg[0])].push(a);
 	opts.alias[a] = arg.slice(1);
 	opts.default[a] = arg[0];
 }
 
-module.exports.parseArguments = function(content){
+function parseArguments(content){
 	let args = content.split(" ");
 	if(!args.length)
 		return [null,null,null];
