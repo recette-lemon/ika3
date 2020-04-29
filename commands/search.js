@@ -35,9 +35,9 @@ function duckduckgo(string, message){
 
 		for (let i = 0; i < links.length; i++) {
 			results.push({
-				title: links[i].structuredText,
+				title: links[i].text,
 				url: links[i].getAttribute("href"),
-				description: descriptions[i].structuredText
+				description: descriptions[i].text
 			});
 		}
 
@@ -62,9 +62,9 @@ function startpage(string, message){
 		for(let t of HTMLParse(bod).querySelectorAll(".w-gl__result")){
 			let a = t.querySelector(".w-gl__result-title");
 			results.push({
-				title: a.structuredText,
+				title: a.text,
 				url: a.getAttribute("href"),
-				description: t.querySelector(".w-gl__description").structuredText
+				description: t.querySelector(".w-gl__description").text
 			});
 		}
 		handleResults(results, message);
