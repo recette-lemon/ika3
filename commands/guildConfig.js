@@ -56,12 +56,12 @@ function assignAliases(id, message, args){
 	for(let alias of inaliases){
 		let [trigger, command] = alias.split("=");
 		if(!(trigger && command))
-			return message.reply("Syntax is:\n```??config --aliases\nsaynice=say nice\nddg=g --ddg```");
+			return message.reply(`Syntax is:\n\`\`\`${Config.trigger}config --aliases\nsaynice=say nice\nddg=g --ddg\`\`\``);
 		if(trigger.match(/[^\w]/))
 			return message.reply("Triggers need to be regular characters.");
 		trigger = trigger.toLowerCase();
 		command = command.replace(/\\(?=-)/, "").split(" ");
-		if(trigger === module.exports.name)
+		if(trigger === module.exports.name.toLowerCase())
 			return message.reply("You're not allowed to brick this command.");
 		aliases[trigger] = command;
 	}
