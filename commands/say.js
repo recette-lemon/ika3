@@ -1,6 +1,6 @@
 module.exports = {
 	name: "Say",
-	triggers: ["say"],
+	triggers: ["say", "echo"],
 	description: "Says things you give it.",
 	category: "general",
 	arguments: {

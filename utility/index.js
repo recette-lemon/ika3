@@ -6,6 +6,7 @@ function loadUtility(){
 		if(file == "index.js")
 			continue;
 
+		delete require.cache[require.resolve("./"+file)];
 		Object.assign(functions, require("./"+file));
 	}
 

@@ -1,27 +1,28 @@
+let Minimist = require("minimist");
+
 module.exports.parseMessage = function(message){
 	if(!message.content.startsWith(Config.trigger) || message.author.bot)
 		return;
 
-	let [args, cmd, command] = parseArguments(message.content);
+	let [args, cmd, command] = parseArguments(message);
 
 	if(!cmd)
 		return;
 
-	if(args.h || args.help){
-		return message.reply({embed: Utility.getHelpEmbed(cmd)});
-	}
+	if(args.h || args.help)
+		return message.reply({embed: getHelpEmbed(cmd)});
 
 	if(cmd.category === "owner" && message.author.id != Config.ownerId)
 		return;
 
-	if(message.guild && guildConfigs[message.guild.id].disabledcommands && guildConfigs[message.guild.id].disabledcommands.includes(cmd.name.toLowerCase()) && cmd.category !== "owner")
+	if(message.guild && Configs.get(message.guild.id).exists("disabledcommands") && Configs.get(message.guild.id).get("disabledcommands").indexOf(cmd.name) !== -1)
 		return;
 
 	try{
 		cmd.func(message, args, command);
 	} catch(err){
-		console.error(command, args, err);
-		message.reply({embed: Utility.errorEmbed});
+		console.log(args, err);
+		message.reply({embed: errorEmbed});
 	}
 };
 
@@ -31,12 +32,23 @@ function parseArg(arg, a, opts){
 	opts.default[a] = arg[0];
 }
 
-function parseArguments(content){
-	let args = content.split(" ");
+function parseArguments(message){
+	let args = message.content.split(" ");
 	if(!args.length)
 		return [null,null,null];
 
-	let command = args.shift().slice(Config.trigger.length).toLowerCase();
+	args[0] = args[0].slice(Config.trigger.length);
+
+	if(Configs.get(message.author.id).get("aliases").exists(args[0])){
+		let userAlias = Configs.get(message.author.id).get("aliases").get(args[0]);
+		args = userAlias.concat(args.slice(1));
+	} else
+	if(message.guild && Configs.get(message.guild.id).get("aliases").exists(args[0])){
+		let guildAlias = Configs.get(message.guild.id).get("aliases").get(args[0]);
+		args = guildAlias.concat(args.slice(1));
+	}
+
+	let command = args.shift().toLowerCase();
 	let cmd = Commands[command];
 
 	if(!cmd)
@@ -63,7 +75,7 @@ function parseArguments(content){
 		}
 	}
 
-	args = require("minimist")(args, opts);
+	args = Minimist(args, opts);
 
 	for(let pool in pools){
 		for(let arg in pools[pool]){
@@ -77,15 +89,15 @@ function parseArguments(content){
 	}
 
 	return [args, cmd, command];
-};
+}
 
 function getFlagString(arg, k){
 	return [k].concat(arg.slice(1)).sort((a,b)=>{
 		return b.length-a.length;
-	}).map(a => (a.length === 1 ? ("-"+a) : ("--"+a))).join(" ");
+	}).map(a => (a.length === 1 ? ("-"+a) : ("--"+a))).sort((a,b)=>a.length-b.length).join(" ");
 }
 
-module.exports.getHelpEmbed = function(cmd){
+function getHelpEmbed(cmd){
 	let embed = new Discord.RichEmbed({
 		title: cmd.name+" ["+cmd.category+"]",
 		description: cmd.description,
@@ -93,7 +105,6 @@ module.exports.getHelpEmbed = function(cmd){
 	});
 
 	embed.addField(Config.trigger+"Triggers", cmd.triggers.sort().join(", "), true);
-
 	if(cmd.arguments.positional)
 		embed.addField("Arguments", cmd.arguments.positional.sort().join(" | "), true);
 	if(cmd.arguments.flags){
@@ -108,11 +119,11 @@ module.exports.getHelpEmbed = function(cmd){
 	}
 
 	return embed;
-};
+}
 
-module.exports.errorEmbed = new Discord.RichEmbed({
+let errorEmbed = new Discord.RichEmbed({
 	title: "Whoops, got an error...",
-	description: "Either you did the inputs wrong, or its just a feature.",
+	description: "Either you did the inputs wrong, or its just a feature.\nTry appending --help for help.",
 	color: Config.embedColour,
 	thumbnail: {
 		url: "https://i.imgur.com/GuIhCoQ.png"
