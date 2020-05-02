@@ -5,6 +5,9 @@ module.exports = {
 	category: "general",
 	arguments: {
 		positional: ["string"],
+		flags: {
+			"no-delete": [false, "n"]
+		}
 	},
 	func: func
 };
@@ -14,5 +17,6 @@ function func(message, args){
 		return message.reply("Give me something to say.");
 
 	message.channel.send(args._.join(" "));
-	message.delete();
+	if(!args["no-delete"])
+		message.delete();
 }

@@ -107,7 +107,7 @@ function func(message, args){
 		return message.reply("This setting isnt settable for servers.");
 
 	// check permissions for servers
-	if(!message.member.permissions.has("MANAGE_GUILD") && setting.server)
+	if(!message.member.permissions.has("MANAGE_GUILD") && !args.user)
 		return message.reply("You don't have manage guild perms.");
 
 	// get user/server id
