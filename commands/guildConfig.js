@@ -48,28 +48,6 @@ function assignDisabledCommands(id, message, args, str){
 	message.reply("Disabled "+commands.join(", ")+".");
 }
 
-function assignAliases(id, message, args){
-	let inaliases = message.content.split("\n").slice(1).map(a=>a.trim());
-	let aliases = {};
-	if(!inaliases.length)
-		return message.reply("Need some aliases.");
-	for(let alias of inaliases){
-		let [trigger, command] = alias.split("=");
-		if(!(trigger && command))
-			return message.reply(`Syntax is:\n\`\`\`${Config.trigger}config --aliases\nsaynice=say nice\nddg=g --ddg\`\`\``);
-		if(trigger.match(/[^\w]/))
-			return message.reply("Triggers need to be regular characters.");
-		trigger = trigger.toLowerCase();
-		command = command.replace(/\\(?=-)/, "").split(" ");
-		if(trigger === module.exports.name.toLowerCase())
-			return message.reply("You're not allowed to brick this command.");
-		aliases[trigger] = command;
-	}
-	Configs.get(id).set("aliases", aliases);
-	Configs.get(id).get("raw").set(args.setting, "\n"+inaliases.join("\n"));
-	message.reply("Set "+(Object.keys(aliases).length)+" aliases.");
-}
-
 let settings = {
 	muterole: {
 		assign: assignMuteRole,
@@ -82,12 +60,6 @@ let settings = {
 		server: true,
 		user: false,
 		flag: [false, "dc"]
-	},
-	aliases: {
-		assign: assignAliases,
-		server: true,
-		user: true,
-		flag: [false, "alias", "al"]
 	}
 };
 
