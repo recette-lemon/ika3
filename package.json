@@ -1,6 +1,6 @@
 {
   "name": "Ika3",
-  "version": "3.3.2",
+  "version": "3.3.3",
   "description": "v3 of the Ika Discord bot, built for the DMC Discord server.",
   "main": "index.js",
   "scripts": {
@@ -27,6 +27,7 @@
     "minimist": "https://github.com/recette-lemon/minimist-without-numbers",
     "node-html-parser": "^1.2.16",
     "request": "^2.88.2",
-    "sqlite": "^3.0.3"
+    "sqlite": "^4.0.7",
+    "sqlite3": "^4.2.0"
   }
 }

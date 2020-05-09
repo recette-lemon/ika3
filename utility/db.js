@@ -142,7 +142,10 @@ function initDB(){
 	console.log("Setting up DB.");
 	if(!Fs.existsSync("./ika-db.sqlite"))
 		var init = true;
-	require("sqlite").open("./ika-db.sqlite").then((m) => {
+	require("sqlite").open({
+		filename: "./ika-db.sqlite",
+		driver: require("sqlite3").Database
+	}).then((m) => {
 		global.DB = m;
 		global.Configs = new ConfigsContainer();
 		if(init)
