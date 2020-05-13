@@ -4,8 +4,15 @@ module.exports = {
 	description: "The classic Unix command, and also s4s fortunes.",
 	category: "game",
 	arguments: {
+		positional: ["file"],
 		flags: {
-			s4s: [false]
+			s4s: [false],
+			files: [false, "f"],
+			offensive: [false, "o"],
+			all: [false, "a"],
+			"cookie-file": [false, "c", "file"],
+			equal: [false, "e"],
+			"long-only": [false, "l", "long"]
 		}
 	},
 	func: func
@@ -39,13 +46,40 @@ function s4sFortune(message){
 	message.reply({embed});
 }
 
+let exec = require("child_process").execFile;
+
+let cookieFiles;
+exec("fortune", ["-f"], (err, stdin, stdout) => {
+	let r = stdout.split("\n").slice(1, -1);
+	cookieFiles = r.slice(0, r.indexOf(r.find(i => !i.startsWith(" ")))).map(i =>
+		i.match(/[^ ]+$/).toString()
+	);
+});
+
 function func(message, args){
 	if(args.s4s)
 		return s4sFortune(message);
 
-	require("child_process").exec("fortune", (err, res) => {
+	if(args.files)
+		return message.reply(cookieFiles.join(", "));
+
+	let a = [];
+
+	if(args._.length){
+		if(cookieFiles.indexOf(args._[0]) === -1)
+			return message.reply("Cookie file doesn't exist.");
+		a.push(args._[0]);
+	}
+
+	let flags = ["o", "a", "c", "e", "l"];
+	for(let flag of flags){
+		if(args[flag])
+			a.push("-"+flag);
+	}
+
+	exec("fortune", a, (err, stdout, stderr) => {
 		if(err)
 			return message.reply("Something went wrong.");
-		message.reply(res);
+		message.reply(stdout.trim() || stderr.trim());
 	});
 }
