@@ -2,6 +2,7 @@ module.exports = {
 	name: "Alias",
 	triggers: ["alias"],
 	description: "Adds and removes user and server aliases. Flags can be escaped with \\",
+	example: "ddg search --ddg",
 	category: "misc",
 	arguments: {
 		positional: ["trigger", "command"],

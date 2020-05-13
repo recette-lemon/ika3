@@ -2,6 +2,7 @@ module.exports = {
 	name: "Math",
 	triggers: ["math", "maths"],
 	description: "Evaluates mathematical expressions. Supports every function and constant in the JS Math object, bitwise operations, converting from and to different number bases, 0x12, 0o12, 0b12, and bigints with an 'n' suffix.",
+	example: "round(random() * 100)",
 	category: "general",
 	arguments: {
 		positional: ["expression"],

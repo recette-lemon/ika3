@@ -104,6 +104,8 @@ function getHelpEmbed(cmd){
 		color: Config.embedColour
 	});
 
+	if(cmd.example)
+		embed.addField("Example", "```"+Config.trigger+cmd.triggers[0]+" "+cmd.example+"```")
 	embed.addField(Config.trigger+"Triggers", cmd.triggers.sort().join(", "), true);
 	if(cmd.arguments.positional)
 		embed.addField("Arguments", cmd.arguments.positional.sort().join(" | "), true);
