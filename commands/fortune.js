@@ -1,13 +1,17 @@
 module.exports = {
 	name: "Fortune",
 	triggers: ["fortune"],
-	description: "Shows your fortune.",
+	description: "The classic Unix command, and also s4s fortunes.",
 	category: "game",
-	arguments: {},
+	arguments: {
+		flags: {
+			s4s: [false]
+		}
+	},
 	func: func
 };
 
-let answers = [
+let s4s = [
 	["Reply hazy, try again", "F51C6A"],
 	["Excellent Luck", "FD4D32"],
 	["Good Luck", "E7890C"],
@@ -24,9 +28,8 @@ let answers = [
 	["(YOU ARE BANNED)", "FF0000"]
 ];
 
-function func(message){
-
-	let answer = answers[Math.floor(Math.random() * answers.length)];
+function s4sFortune(message){
+	let answer = s4s[Math.floor(Math.random() * s4s.length)];
 
 	let embed = new Discord.RichEmbed({
 		title: answer[0],
@@ -34,4 +37,15 @@ function func(message){
 	});
 
 	message.reply({embed});
+}
+
+function func(message, args){
+	if(args.s4s)
+		return s4sFortune(message);
+
+	require("child_process").exec("fortune", (err, res) => {
+		if(err)
+			return message.reply("Something went wrong.");
+		message.reply(res);
+	});
 }
