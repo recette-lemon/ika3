@@ -21,3 +21,7 @@ module.exports.getDateSince = function(end){
 	let d = distance.getUTCDate() - 1;
 	return (y?y+" Year"+(y===1?"":"s")+", ":"")+(m?m+" Month"+(m===1?"":"s")+", ":"")+d+" Day"+(d===1?"":"s");
 };
+
+module.exports.formatNumber = function(n){
+	return n.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,');
+}

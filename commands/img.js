@@ -6,6 +6,7 @@ module.exports = {
 	arguments: {
 		positional: ["terms"],
 		flags: {
+			"family-filter": [false, "f"],
 			backend: {
 				duckduckgo: [false, "ddg", "d"],
 				startpage: [false, "sp", "s"]
@@ -15,20 +16,23 @@ module.exports = {
 	func: func
 };
 
-let pageBase = "http://duckduckgo.com/?ia=images&iax=images&k5=1&kp=-2&q=";
+let pageBase = "http://duckduckgo.com/?ia=images&iax=images&k5=1&q=";
 let jsonBase = "https://duckduckgo.com/i.js?l=us-en&o=json&vqd=VQD&f=,,,&p=-1&v7exp=a&q=";
 let Request = require("request");
 let HTMLParse = require("node-html-parser").parse;
 
-function duckduckgo(message, string){
+function duckduckgo(message, string, args){
 	let query = encodeURIComponent(string);
-	
-	Request.get(pageBase+query, {}, (perr, pres, pbod) => {
+	let url = pageBase+query+(args.f ? "" : "&kp=-2");
+	Request.get(url, {}, (perr, pres, pbod) => {
 		if(perr || !pbod)
 			throw("nope");
 
 		let vqd = pbod.match(/&vqd=(.+)&p/)[1];
 		let url = jsonBase.replace("VQD", vqd)+query;
+
+		if(args.f)
+			url = url.replace("p=-1", "p=1");
 
 		Utility.get(url, (jerr, jres, jbod) => {
 			let results = JSON.parse(jbod).results;
@@ -75,8 +79,14 @@ function duckduckgo(message, string){
 	});
 }
 
-function startpage(message, string){
+
+let j = Request.jar();
+j.setCookie(Request.cookie('preferences=disable_family_filterEEE1N1Ndisable_open_in_new_windowEEE0N1Ndisable_video_family_filterEEE1N1Nenable_post_methodEEE1N1Nenable_proxy_safety_suggestEEE1N1Nenable_stay_controlEEE0N1Ngeo_mapEEE0N1Nlang_homepageEEEs/default/en/N1NlanguageEEEenglishN1Nlanguage_uiEEEenglishN1Nnum_of_resultsEEE10N1Nother_iaEEE0N1NsuggestionsEEE0N1Nwikipedia_iaEEE0N1Nwt_unitEEEcelsius'), "https://startpage.com");
+
+function startpage(message, string, args){
+	let jar = args.f ? undefined : j; 
 	Request.post("https://startpage.com/sp/search", {
+		jar: jar,
 		headers: {
 			"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36",
 			"Accept-Encoding": "identity" // no gzip thx
@@ -140,5 +150,5 @@ function func(message, args){
 	if(!string)
 		return message.reply("Gonna need something to search for.");
 
-	backends[args.backend || "startpage"](message, string);
+	backends[args.backend || "startpage"](message, string, args);
 }

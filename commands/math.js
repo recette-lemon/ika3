@@ -9,7 +9,9 @@ module.exports = {
 			"number-base": ["10", "n"],
 			"hexadecimal": [false, "hex", "h"],
 			"binary": [false, "bin", "b"],
-			"octal": [false, "oct", "o"]
+			"octal": [false, "oct", "o"],
+			"plain": [false, "p"],
+			"raw": [false, "r"]
 		}
 	},
 	func: func
@@ -259,6 +261,12 @@ function func(message, args){
 		return message.reply("Need something to parse.");
 
 	let result = evalMaths(expression).toString(nbase);
+
+	if(!args.raw)
+		result = Utility.formatNumber(result);
+
+	if(args.plain)
+		return message.reply(result);
 
 	let embed = new Discord.RichEmbed({
 		thumbnail: {

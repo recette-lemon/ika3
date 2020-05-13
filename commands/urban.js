@@ -9,7 +9,8 @@ module.exports = {
 	func: func
 };
 
-var Request = require("request");
+let Request = require("request");
+let HTMLParse = require("node-html-parser").parse;
 
 function func(message, args){
 	let term = args._.join(" ");
@@ -20,6 +21,6 @@ function func(message, args){
 
 	Request.get(url, (err, res, bod) => {
 		let def = bod.match(/property="fb:app_id"><meta content\=\"(.+)" name="Descri/);
-		message.reply(def ? def[1] : "Not found");
+		message.reply(def ? HTMLParse(def[1]).text : "Not found");
 	});
 }
