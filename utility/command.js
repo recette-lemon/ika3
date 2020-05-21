@@ -165,7 +165,7 @@ module.exports.MessageControls = class MessageControls extends require("events")
 
 module.exports.imageCommandArguments = {
 	flags: {
-		extension: [false, "ext", "e"]
+		extension: ["", "ext", "e"]
 	}
 };
 module.exports.imageCommand = function(message, args, folder){
