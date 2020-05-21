@@ -163,9 +163,22 @@ module.exports.MessageControls = class MessageControls extends require("events")
 	}
 };
 
-module.exports.imageCommand = function(message, folder){
-	let n = Math.floor(Math.random() * Images[folder].length),
-		file = Images[folder][n],
+module.exports.imageCommandArguments = {
+	flags: {
+		extension: [false, "ext", "e"]
+	}
+};
+module.exports.imageCommand = function(message, args, folder){
+	let imgs = Images[folder];
+
+	if(args.ext){
+		imgs = imgs.filter(i => i.endsWith("."+args.ext));
+		if(imgs.length === 0)
+			return message.reply("No files with that ext.");
+	}
+
+	let n = Math.floor(Math.random() * imgs.length),
+		file = imgs[n],
 		ext = file.split(".").pop(),
 		name = folder+"-"+(n+1)+"."+ext;
 
