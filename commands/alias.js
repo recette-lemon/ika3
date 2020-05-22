@@ -38,6 +38,10 @@ function func(message, args){
 	let id = args.server && message.guild ? message.guild.id : message.author.id;
 	let aliasesConfig = Configs.get(id).get("aliases");
 
+	// nothing, so print all aliases
+	if(!trigger && !args.remove)
+		return message.reply(listAliases(aliasesConfig) || "None set.");
+
 	// check permissions for servers
 	if(!message.member.permissions.has("MANAGE_GUILD") && args.server)
 		return message.reply("You don't have manage guild perms.");
@@ -56,10 +60,6 @@ function func(message, args){
 			return message.reply("Doesn't exist.");
 		}
 	}
-
-	// nothing, so print all aliases
-	if(!trigger)
-		return message.reply(listAliases(aliasesConfig) || "None set.");
 
 	// check whether trigger makes sense
 	if(trigger.match(/[^\w]/))

@@ -29,3 +29,15 @@ module.exports.getAudioFromAdaptiveFormats = function(af, encoding="opus"){
 		}
 	}
 };
+
+module.exports.expandURL = function(base, url){
+	if(url.match("^https?://")) // absolute
+		return url;
+	let protocol = base.split(":")[0]
+	let domain = base.split("/")[2];
+	if(url.startsWith("/")) // root
+		return protocol+"://"+domain+url;
+	if(!base.endsWith("/"))
+		base = base+"/";
+	return base+url; // relative
+}
