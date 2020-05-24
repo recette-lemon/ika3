@@ -1,7 +1,7 @@
 module.exports = {
 	name: "Search",
 	triggers: ["search", "g"],
-	description: "Search using Startpage (Google) or DuckDuckGo. Defaults to Startpage.",
+	description: "Search using Startpage (Google) or DuckDuckGo. Defaults to Startpage, unless terms start with a `!`, then DDG will be used for its bangs.",
 	category: "search",
 	arguments: {
 		positional: ["terms"],
@@ -21,6 +21,7 @@ let HTMLParse = require("node-html-parser").parse;
 
 function duckduckgo(string, message, args){
 	Request.post("https://duckduckgo.com/lite/", {
+		followAllRedirects: true,
 		form: {
 			q: string,
 			kl: "wt-wt"
@@ -28,6 +29,8 @@ function duckduckgo(string, message, args){
 	}, (err, res, bod) => {
 		if(!bod || err)
 			return message.reply("Ok, something didn't work.");
+		if(res.request.href !== "https://duckduckgo.com/lite/")
+			return message.reply(res.request.href);
 		let body = HTMLParse(bod);
 		let results = [];
 		let links = body.querySelectorAll(".result-link");
@@ -58,6 +61,9 @@ function startpage(string, message, args){
 			abp: 1
 		}
 	}, (err, res, bod) => {
+		if(!bod || err)
+			return message.reply("Ok, something didn't work.");
+		let body = HTMLParse(bod);
 		let results = [];
 		for(let t of HTMLParse(bod).querySelectorAll(".w-gl__result")){
 			let a = t.querySelector(".w-gl__result-title");
@@ -135,5 +141,5 @@ function func(message, args){
 	let string = args._.join(" ");
 	if(!string)
 		return message.reply("Need something to search for, buddy.");
-	backends[args.backend || "startpage"](string, message, args);
+	backends[args.backend || (string[0] === "!" ? "duckduckgo" : "startpage")](string, message, args);
 }
