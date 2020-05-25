@@ -14,17 +14,20 @@ module.exports = {
 	func: func
 };
 
-function viewAlias(aliases, trigger){
+function viewAlias(aliases, trigger, trim){
 	let command = aliases[trigger];
 	if(!command)
 		return;
-	return "\n"+trigger+" "+command.join(" ");
+	let out = trigger+" "+command.join(" ");
+	if(trim)
+		out = out.replace(/\n/g, "\\n").slice(0, 64) + (out.length > 64 ? "…" : "");
+	return "\n"+out;
 }
 
 function listAliases(aliases){
 	let out = "";
 	for(let trigger in aliases){
-		out += viewAlias(aliases, trigger);
+		out += viewAlias(aliases, trigger, true);
 	}
 	return out;
 }
@@ -61,10 +64,6 @@ function func(message, args){
 		}
 	}
 
-	// check whether trigger makes sense
-	if(trigger.match(/[^\w]/))
-		return message.reply("Can't use non-word characters in trigger.");
-
 	// if no command, print specific alias
 	if(!command.length)
 		return message.reply(viewAlias(aliasesConfig, trigger) || "Not set.");
@@ -74,7 +73,6 @@ function func(message, args){
 	// check command actually exists in ika
 	if(!Commands[command[0]])
 		return message.reply(command[0]+" doesn't exist as a command.");
-
 	if(trigger === module.exports.triggers[0])
 		return message.reply("Not letting you brick this command.");
 	

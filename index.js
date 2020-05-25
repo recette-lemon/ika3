@@ -22,3 +22,4 @@ Bot.on("guildMemberAdd", (member) => {
 });
 
 Bot.on("message", Utility.parseMessage);
+
