@@ -3,7 +3,7 @@ module.exports = {
 	triggers: ["config"],
 	description: "Sets settings for servers and users.",
 	example: "--mr muted",
-	category: "moderation",
+	category: "bot",
 	arguments: {
 		positional: ["key", "values to set"],
 		flags: {

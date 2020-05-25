@@ -3,7 +3,7 @@ module.exports = {
 	triggers: ["alias"],
 	description: "Adds and removes user and server aliases. Flags can be escaped with \\",
 	example: "ddg search --ddg",
-	category: "misc",
+	category: "bot",
 	arguments: {
 		positional: ["trigger", "command"],
 		flags: {
@@ -43,7 +43,9 @@ function func(message, args){
 
 	// nothing, so print all aliases
 	if(!trigger && !args.remove)
-		return message.reply(listAliases(aliasesConfig) || "None set.");
+		return message.reply(listAliases(aliasesConfig) || "None set.", {
+			disableMentions: true
+		});
 
 	// check permissions for servers
 	if(!message.member.permissions.has("MANAGE_GUILD") && args.server)

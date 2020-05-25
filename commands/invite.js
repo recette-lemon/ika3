@@ -2,7 +2,7 @@ module.exports = {
 	name: "Invite",
 	triggers: ["invite"],
 	description: "Provides an invite link.",
-	category: "misc",
+	category: "bot",
 	arguments: {},
 	func: func
 };

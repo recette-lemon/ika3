@@ -2,7 +2,7 @@ module.exports = {
 	name: "Ping",
 	triggers: ["ping", "uptime"],
 	description: "Gives bot ping and uptime.",
-	category: "general",
+	category: "bot",
 	arguments: {},
 	func: func
 };

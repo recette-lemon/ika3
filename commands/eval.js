@@ -13,6 +13,8 @@ module.exports = {
 };
 
 function func(message, args){
+	if(message.author.id !== Config.ownerId)
+		return;
 	let term = args._.join(" "), out;
 	
 	try{

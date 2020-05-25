@@ -2,7 +2,7 @@ module.exports = {
 	name: "Help",
 	triggers: ["help"],
 	description: "Help message.",
-	category: "misc",
+	category: "bot",
 	arguments: {},
 	func: func
 };
