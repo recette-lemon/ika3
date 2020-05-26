@@ -12,7 +12,7 @@ Bot.login(Config.token);
 Bot.on("ready", () => {
 	console.log("Ready.");
 	Utility.checkMutes();
-	setInterval(Utility.statusRotate, 10000);
+	setInterval(Utility.statusRotate, 15000);
 	Utility.statusRotate();
 });
 

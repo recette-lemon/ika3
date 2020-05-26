@@ -51,7 +51,16 @@ function saucenao(message, url){
 				break;	
 			results.push({
 				thumbnail: t.querySelector("img").getAttribute("src"),
-				content: t.querySelector(".resulttablecontent").structuredText
+				content: t.querySelector(".resulttablecontent").structuredText,
+				links: t.querySelectorAll("a").filter(l =>
+					!l.getAttribute("href").includes("saucenao.com")
+				).map(l => {
+					let t = l.text;
+					let h = l.getAttribute("href");
+					if(t)
+						return `[${t}](${h})`;
+					return `[${h.split("/")[2].replace(/^www\./, "")}](${h})`
+				}).join(" ") || "None."
 			});
 		}
 
@@ -64,6 +73,10 @@ function saucenao(message, url){
 				{
 					name: "SauceNAO",
 					value: results[0].content
+				},
+				{
+					name: "Links",
+					value: results[0].links
 				}
 			],
 			thumbnail: {
@@ -86,6 +99,7 @@ function saucenao(message, url){
 				else return;
 
 				embed.fields[0].value = results[index].content;
+				embed.fields[1].value = results[index].links;
 				embed.thumbnail.url = results[index].thumbnail;
 				embed.footer.text = "#"+(index+1)+" of "+results.length;
 				mes.edit({embed});
@@ -195,3 +209,4 @@ function func(message, args){
 
 	backends[backend](message, url);
 }
+

@@ -139,6 +139,8 @@ function createBlankDB(){
 }
 
 function initDB(){ 
+	if(global.DB)
+		return;
 	console.log("Setting up DB.");
 	if(!Fs.existsSync("./ika-db.sqlite"))
 		var init = true;
@@ -155,3 +157,4 @@ function initDB(){
 }
 
 initDB();
+

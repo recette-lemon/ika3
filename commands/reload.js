@@ -20,13 +20,14 @@ function imageLength(){
 function func(message, args){
 	let out = "";
 	if(args.commands){
-		let lastN = Utility.getCommandsNumber();
+		let lastNCommands = Utility.getCommandsNumber();
 		Commands = Utility.getCommands();
 		Utility.updateGitHash();
-		out = `Reloaded commands (${lastN}) => (${Utility.getCommandsNumber()}) commands.\n`;
+		out += `Reloaded commands (${lastNCommands}) => (${Utility.getCommandsNumber()}) commands.\n`;
 	}
 	if(args.utility){
 		let lastN = Object.keys(Utility).length;
+		delete require.cache[require.resolve("../utility")];
 		Utility = require("../utility");
 		out += `Reloaded utility (${lastN}) => (${Object.keys(Utility).length}) functions.\n`;
 	}
@@ -48,3 +49,4 @@ function func(message, args){
 
 	message.reply(out || "Nothing reloaded.");
 }
+
