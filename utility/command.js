@@ -202,39 +202,45 @@ module.exports.imageCommand = function(message, args, folder){
 module.exports.getUser = function(message, args){
 	if(message.mentions.users.first())
 		return message.mentions.users.first();
-
 	let a = args._.join(" ");
-
 	if(isNaN(a)){
-		if(a.includes("#")){
+		if(a.includes("#"))
 			return Bot.users.find((u) => u.tag == a);
-		}
 		return Bot.users.find((u) => u.username == a);
 	}
 	return Bot.users.get(args._[0]);
 };
 
-function isImageExt(file){
-	return ~["png", "jpg", "jpeg", "gif", "webp"].indexOf(file.split(".").pop());
-}
-
-function parseMessageForImages(message){
-	if(message.attachments.first())
-		return message.attachments.first().url;
-	if(message.embeds[0] && message.embeds[0].image)
-		return message.embeds[0].image.url;
-	let args = message.content.split(" ");
-	return args.find(a => a.startsWith("http") && isImageExt(a));
-}
-
-module.exports.getImage = function(message){ // still need to expand to cover more cases
-	let url = parseMessageForImages(message);
-	if(!url){
-		for(let mes of message.channel.messages.array().reverse()){
-			url = parseMessageForImages(mes);
-			if(url)
-				return url;
-		}
-	}
-	return url;
+let mimes = {
+	png:"img",jpg:"img",jpeg:"img",gif:"img",webp:"img",
+	mp4:"vid",webm:"vid",avi:"vid",mov:"vid",mov:"vid",mkv:"vid"
 };
+function getMime(url){
+	return mimes[url.split(".").pop().split("?")[0]];
+}
+
+function isImageExt(url){
+	return getMime(url) === "img";
+}
+
+function parseMessageForImages(message, includeVid){
+	if(message.attachments.first())
+		return [message.attachments.first().url, message.attachments.first()];
+	if(message.embeds[0] && message.embeds[0].image)
+		return [message.embeds[0].image.url, message.embeds[0].image];
+	let args = message.content.split(" ");
+	return [args.find(a => {
+		let m = getMime(a);
+		return a.startsWith("http") && (m === "img" || (includeVid && m === "vid"));
+	}), null];
+}
+
+module.exports.getImage = function(message, includeVid){
+	for(let mes of message.channel.messages.array().reverse()){
+		res = parseMessageForImages(mes, includeVid);
+		if(res[0])
+			return res;
+	}
+	return [null, null];
+};
+
