@@ -132,36 +132,51 @@ let errorEmbed = new Discord.RichEmbed({
 	}
 });
 
-module.exports.MessageControls = class MessageControls extends require("events"){
+let MessageControls = module.exports.MessageControls = class MessageControls extends require("events"){
 	constructor(message, user, emojis=["◀️", "▶️"], timeOut=3000000){
 		super();
-
 		async function react(i){
 			await message.react(emojis[i]);
 			if(i !== emojis.length-1)
 				await react(i+1);
 		}
-
 		react(0).then(() => {
 			let collector = message.createReactionCollector((r, u) => {
 				return u.id === user.id && emojis.indexOf(r.emoji.name) !== -1;
 			}, {
 				time: timeOut
 			});
-
 			this.emit("ready");
-
 			collector.on("collect", (r) => {
 				r.n = emojis.indexOf(r.emoji.name);
 				this.emit(r.emoji.name, r);
 				this.emit("reaction", r);
 				r.remove(user);
 			});
-
 			collector.on('end', () => message.clearReactions());
 		});
 	}
 };
+
+module.exports.scrollControls = function(mes, arr, func){
+	let index = 0;
+	function makeOut(){
+		let out = func(arr[index], (index+1)+" of "+arr.length, arr, index);
+		return typeof(out) === "string" ? [out] : out;
+	}
+	mes.channel.send(...makeOut()).then(m => {
+		let controls = new MessageControls(m, mes.author);
+		controls.on("reaction", r => {
+			if(r.n === 0 && arr[index-1])
+				index--;
+			else if(r.n === 1 && arr[index+1])
+				index++;
+			else return;
+			let out = func(arr[index], (index+1)+" of "+arr.length, arr, index);
+			m.edit(...makeOut());
+		});
+	});
+}
 
 module.exports.imageCommandArguments = {
 	flags: {
