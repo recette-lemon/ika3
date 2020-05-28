@@ -25,7 +25,7 @@ function func(message, args){
 	Utility.searchYT(terms, res => {
 		if(!res[0])
 			return message.reply("Nothing found.");
-		Utility.ScrollControls(message, res, output);
+		Utility.scrollControls(message, res, output);
 	});
 }
 
