@@ -13,14 +13,18 @@ module.exports = {
 };
 
 function func(message, args){
-	let user = Utility.getUser(message, args) || message.author,
-		aviurl = args.server ? message.guild.iconURL+"?size=2048" : user.avatarURL || user.defaultAvatarURL;
-
+	let user = Utility.getUser(message, args) || message.author;
+	let aviurl = (args.server ? message.guild.iconURL : user.avatarURL || user.defaultAvatarURL);
+	if(aviurl.includes("a_"))
+		aviurl = aviurl.replace(/\png|jpg/, "gif");
+	if(!aviurl.includes("?size="))
+		aviurl += "?size=2048";
 	let embed = new Discord.RichEmbed({
 		color: Config.embedColour,
 		image: {
 			url: aviurl
 		}
 	});
-	message.channel.send({embed});
+	message.channel.send(embed);
 }
+
