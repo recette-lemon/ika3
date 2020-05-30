@@ -2,12 +2,12 @@ global.Discord = require("discord.js");
 
 global.Config = JSON.parse(require("fs").readFileSync("config.json"));
 global.Utility = require("./utility");
-
 global.Images = Utility.getImageLists();
 global.Commands = Utility.getCommands();
 
 global.Bot = new Discord.Client();
 Bot.login(Config.token);
+delete Config.token;
 
 Bot.on("ready", () => {
 	console.log("Ready.");

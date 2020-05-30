@@ -1,7 +1,7 @@
 {
   "name": "Ika3",
   "version": "3.3.6",
-  "description": "v3 of the Ika Discord bot, built for the DMC Discord server.",
+  "description": "v3 of the Ika Discord bot",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

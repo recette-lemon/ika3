@@ -23,3 +23,4 @@ function func(message){
 	embed.addField("Users", Bot.users.size, true);
 	message.channel.send({embed});
 }
+

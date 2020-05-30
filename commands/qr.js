@@ -25,3 +25,4 @@ function func(message, args){
 		message.reply("```"+bod+"```");
 	});
 }
+
