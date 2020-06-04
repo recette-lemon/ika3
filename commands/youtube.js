@@ -15,7 +15,7 @@ function output(res, posStr){
 		channel: "https://www.youtube.com/channel/",
 		playlist: "https://www.youtube.com/playlist?list="
 	}[res.type] + (res.videoId || res.playlistId || res.authorId);
-	return posStr+" "+link+"\n"+res.description.split("\n")[0];
+	return posStr+" "+link+"\n"+res.description.split("\n")[0].replace(/(https?:\/\/\S+)/, "<$1>");
 }
 
 function func(message, args){
