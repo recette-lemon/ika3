@@ -20,7 +20,7 @@ let Request = require("request");
 let HTMLParse = require("node-html-parser").parse;
 
 function duckduckgo(string, message, args){
-	Request.post("https://duckduckgo.com/lite/", {
+	Request.post("https://lite.duckduckgo.com/lite/", {
 		followAllRedirects: true,
 		form: {
 			q: string,
@@ -29,7 +29,7 @@ function duckduckgo(string, message, args){
 	}, (err, res, bod) => {
 		if(!bod || err)
 			return message.reply("Ok, something didn't work.");
-		if(res.request.href !== "https://duckduckgo.com/lite/")
+		if(res.request.href !== "https://lite.duckduckgo.com/lite/")
 			return message.reply(res.request.href);
 		let body = HTMLParse(bod);
 		let results = [];
