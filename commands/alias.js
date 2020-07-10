@@ -48,7 +48,7 @@ function func(message, args){
 		});
 
 	// check permissions for servers
-	if(!message.member.permissions.has("MANAGE_GUILD") && args.server)
+	if(message.guild && !message.member.permissions.has("MANAGE_GUILD") && args.server)
 		return message.reply("You don't have manage guild perms.");
 
 	// remove if remove flag and alias exists
