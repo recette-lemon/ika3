@@ -48,6 +48,10 @@ function duckduckgo(string, message, args){
 	});
 }
 
+let spjar = Request.jar();
+let spcookie = Request.cookie('preferences=disable_family_filterEEE1N1Ndisable_open_in_new_windowEEE0N1Ndisable_video_family_filterEEE1N1Nenable_post_methodEEE1N1Nenable_proxy_safety_suggestEEE0N1Nenable_stay_controlEEE0N1Ngeo_mapEEE0N1Nlang_homepageEEEs');
+spjar.setCookie(spcookie, "https://startpage.com");
+
 function startpage(string, message, args){
 	Request.post("https://startpage.com/sp/search", {
 		headers: {
@@ -59,7 +63,8 @@ function startpage(string, message, args){
 			cat: "web",
 			pg: "",
 			abp: 1
-		}
+		},
+		jar: spjar
 	}, (err, res, bod) => {
 		if(!bod || err)
 			return message.reply("Ok, something didn't work.");
@@ -80,7 +85,7 @@ function startpage(string, message, args){
 }
 
 function handleResults(results, message, args){
-	if(!results)
+	if(!(results && results.length))
 		return message.reply("Nothing found.");
 	let index = 0;
 	let embed = args.plain ? undefined : new Discord.RichEmbed({
