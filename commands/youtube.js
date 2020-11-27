@@ -48,6 +48,8 @@ function func(message, args){
 				description: ""
 			});
 		}
+		if(!results[0])
+			return message.reply("Nothing found.");
 		Utility.scrollControls(message, results, output);
 	});
 }
