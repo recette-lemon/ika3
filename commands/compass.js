@@ -24,8 +24,8 @@ function func(message, args){
 	let y = a[1];
 
 	if(!(isNaN(x) || isNaN(y))){
-		x = Utility.clamp(Math.round(x), 100, -100);
-		y = Utility.clamp(Math.round(y), 100, -100);
+		x = Utility.clamp(Math.round(x*10), 100, -100);
+		y = Utility.clamp(Math.round(y*10), 100, -100);
 		DB.run("REPLACE INTO compass (id, x, y) VALUES (?, ?, ?)", message.author.id, x, y).then(() => {
 			message.reply("Added/updated DB.");
 		});
