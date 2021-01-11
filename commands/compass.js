@@ -19,13 +19,13 @@ function getCompassURL(values){
 }
 
 function func(message, args){
-
 	let a = message.content.split(" ").slice(1)
+	let x = a[0];
+	let y = a[1];
 
-	let x = Utility.clamp(Math.round(a[0] * 10), 100, -100);
-	let y = Utility.clamp(Math.round(a[1] * 10), 100, -100);
-
-	if(x && y){
+	if(!(isNaN(x) || isNaN(y))){
+		x = Utility.clamp(Math.round(x), 100, -100);
+		y = Utility.clamp(Math.round(y), 100, -100);
 		DB.run("REPLACE INTO compass (id, x, y) VALUES (?, ?, ?)", message.author.id, x, y).then(() => {
 			message.reply("Added/updated DB.");
 		});
