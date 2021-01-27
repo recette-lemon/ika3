@@ -2,5 +2,6 @@
 	"token": "",
 	"trigger": "**",
 	"embedColour": 3447003,
-	"ownerId": ""
+	"ownerId": "",
+	"invidiousInstance": "tube.connect.cafe"
 }

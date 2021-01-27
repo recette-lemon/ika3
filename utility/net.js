@@ -1,12 +1,10 @@
 let get = module.exports.get = require("request").get;
 
 module.exports.searchYT = function(terms, callback, fields="type,title,videoId,author,description"){ // yt functions can be extended in the future with more params and asking for more things
-	let url = "https://invidio.us/api/v1/search?fields="+fields+"&q="+encodeURIComponent(terms);
-
+	let url = `https://${Config.invidiousInstance}/api/v1/search?fields=${fields}&q=${encodeURIComponent(terms)}`;
 	get(url, (err, res, bod) => {
 		if(err || !bod)
-			throw("nope");
-
+			callback([]);
 		callback(JSON.parse(bod));
 	});
 };
