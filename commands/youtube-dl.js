@@ -22,7 +22,7 @@ function func(message, args){
 		let audio = Utility.getAudioFromAdaptiveFormats(res.adaptiveFormats),
 			video = Utility.getAudioFromAdaptiveFormats(res.formatStreams, "h264");
 
-		let embed = new Discord.RichEmbed({
+		let embed = new Discord.MessageEmbed({
 			title: res.title,
 			url: "https://www.youtube.com/watch?v=" + id,
 			thumbnail: {

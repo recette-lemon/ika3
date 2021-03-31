@@ -38,7 +38,7 @@ let s4s = [
 function s4sFortune(message){
 	let answer = s4s[Math.floor(Math.random() * s4s.length)];
 
-	let embed = new Discord.RichEmbed({
+	let embed = new Discord.MessageEmbed({
 		title: answer[0],
 		color: parseInt(answer[1], 16)
 	});

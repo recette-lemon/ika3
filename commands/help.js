@@ -8,7 +8,7 @@ module.exports = {
 };
 
 function func(message, args){
-	let embed = new Discord.RichEmbed({
+	let embed = new Discord.MessageEmbed({
 		title: "Get help for each command with -h or --help.",
 		thumbnail: {
 			url: "https://i.imgur.com/gv4Itmg.png"

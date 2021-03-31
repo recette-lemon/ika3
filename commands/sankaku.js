@@ -74,7 +74,7 @@ function func(message, args){
 
 		getThumbnail(hostChannel, thumbnailCache, thumbnails[0], pic => {
 
-			let embed = new Discord.RichEmbed({
+			let embed = new Discord.MessageEmbed({
 				title: "[Link]",
 				url: postBase+results[0].id,
 				image: {

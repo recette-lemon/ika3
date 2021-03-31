@@ -12,7 +12,7 @@ module.exports = {
 let congrats = ['Singles', 'Dubs', 'Trips!', 'Quads!!', 'Quints!!!', 'Holy shit ur a god!!!1!1!'];
 
 function func(message, args){
-	let embed = new Discord.RichEmbed({
+	let embed = new Discord.MessageEmbed({
 		color: Config.embedColour,
 		footer: {
 			text: message.author.tag,

@@ -12,12 +12,12 @@ module.exports = {
 };
 
 function patsToString(res, i, total){
-	return "#"+(i+1)+" "+((Bot.users.get(res[i].id)||{}).username||"?")+": "+res[i].pats+" ("+(res[i].pats/total*100).toFixed(1)+"%)";
+	return "#"+(i+1)+" "+((Bot.users.cache.get(res[i].id)||{}).username||"?")+": "+res[i].pats+" ("+(res[i].pats/total*100).toFixed(1)+"%)";
 }
 
 function func(message, args){
 
-	let embed = new Discord.RichEmbed({
+	let embed = new Discord.MessageEmbed({
 		thumbnail: {
 			url: "https://i.imgur.com/6chbyJ7.png"
 		},

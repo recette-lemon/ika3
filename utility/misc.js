@@ -14,7 +14,7 @@ let statuses = [
 	getVersion,
 	() => "https://ika.eiko.cc",
 	() => "**help | **invite",
-	() => Bot.guilds.size+" servers, "+Bot.users.size+" users, "+Utility.getCommandsNumber()+" commands."
+	() => Bot.guilds.cache.size+" servers, "+Bot.users.cache.size+" users, "+Utility.getCommandsNumber()+" commands."
 ];
 
 module.exports.statusRotate = function statusRotate(){

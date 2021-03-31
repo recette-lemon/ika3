@@ -21,7 +21,7 @@ let Request = require("request");
 let HTMLParse = require("node-html-parser").parse;
 
 function google(message, url){ // trying to actually parse the site is wasted effort
-	let embed = new Discord.RichEmbed({
+	let embed = new Discord.MessageEmbed({
 		title: "Google.com",
 		color: Config.embedColour,
 		url: "https://www.google.com/searchbyimage?&image_url="+url
@@ -31,7 +31,7 @@ function google(message, url){ // trying to actually parse the site is wasted ef
 }
 
 function tineye(message, url){
-	let embed = new Discord.RichEmbed({
+	let embed = new Discord.MessageEmbed({
 		title: "Tineye.com",
 		color: Config.embedColour,
 		url: "https://tineye.com/search?url=" + encodeURIComponent(url)
@@ -67,7 +67,7 @@ function saucenao(message, url){
 		if(results.length === 0)
 			return message.reply("Nothing found.");
 
-		let embed = new Discord.RichEmbed({
+		let embed = new Discord.MessageEmbed({
 			color: Config.embedColour,
 			fields: [
 				{
@@ -133,7 +133,7 @@ function iqdb(message, url){
 		if(!results[0])
 			return message.reply("No results.");
 
-		let embed = new Discord.RichEmbed({
+		let embed = new Discord.MessageEmbed({
 			title: results[0].service,
 			url: results[0].link,
 			color: Config.embedColour,
@@ -180,7 +180,7 @@ function whatanime(message, url){
 		let thumbnail = `https://trace.moe/thumbnail.php?anilist_id=${docs.anilist_id}&file=${encodeURIComponent(docs.filename)}&t=${docs.at}&token=${docs.tokenthumb}`;
 		let video = `${`https://media.trace.moe/video/${docs.anilist_id}/${encodeURIComponent(docs.filename)}?t=${docs.at}&token=${docs.tokenthumb}`}`;
 		let duration = Utility.toHHMMSS(docs.from|0).replace(/^00:/, "")+" - "+Utility.toHHMMSS(docs.to|0).replace(/^00:/, "");
-		let embed = new Discord.RichEmbed({
+		let embed = new Discord.MessageEmbed({
 			title: docs.title_english,
 			description: docs.title_romaji,
 			color: Config.embedColour,

@@ -269,7 +269,7 @@ function func(message, args){
 	if(args.plain)
 		return message.reply(result);
 
-	let embed = new Discord.RichEmbed({
+	let embed = new Discord.MessageEmbed({
 		thumbnail: {
 			url: "https://i.imgur.com/WPfOs73.png"
 		},

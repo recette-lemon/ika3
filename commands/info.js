@@ -17,7 +17,7 @@ function func(message, args){
 		s = args.server,
 		member = message.guild ? message.guild.members.get(user.id) : {};
 	
-	let embed = new Discord.RichEmbed({
+	let embed = new Discord.MessageEmbed({
 		author: {
 			name: s ? message.guild.name : user.tag
 		},

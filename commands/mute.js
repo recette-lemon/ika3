@@ -58,7 +58,7 @@ function func(message, args){
 		}
 
 		let out = users.map(u => {
-			let user = Bot.users.get(u);
+			let user = Bot.users.cache.get(u);
 			if(!user) return;
 			let mute = guildConfig.get("mutes").get(u);
 			let r = mute.time - Math.round(((new Date()).getTime() - mute.start) / 1000);

@@ -88,7 +88,7 @@ function handleResults(results, message, args){
 	if(!(results && results.length))
 		return message.reply("Nothing found.");
 	let index = 0;
-	let embed = args.plain ? undefined : new Discord.RichEmbed({
+	let embed = args.plain ? undefined : new Discord.MessageEmbed({
 		color: Config.embedColour,
 		footer: {},
 		thumbnail: {}

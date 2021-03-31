@@ -8,7 +8,7 @@ module.exports = {
 };
 
 function func(message){
-	let embed = new Discord.RichEmbed({
+	let embed = new Discord.MessageEmbed({
 		thumbnail: {
 			url: "https://i.imgur.com/gv4Itmg.png"
 		},
@@ -19,8 +19,8 @@ function func(message){
 	embed.addField("Ping", Math.round(Bot.ping) + "ms", true);
 	embed.addField("Commands", Utility.getCommandsNumber(), true);
 	embed.addField("Images", Object.values(Images).map(i => i.length).reduce((a,b) => a+b), true);
-	embed.addField("Servers", Bot.guilds.size, true);
-	embed.addField("Users", Bot.users.size, true);
+	embed.addField("Servers", Bot.guilds.cache.size, true);
+	embed.addField("Users", Bot.users.cache.size, true);
 	message.channel.send({embed});
 }
 

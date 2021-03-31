@@ -32,7 +32,7 @@ function func(message, args){
 		return;
 	}
 
-	let embed = new Discord.RichEmbed({
+	let embed = new Discord.MessageEmbed({
 		image: {},
 		color: Config.embedColour
 	});

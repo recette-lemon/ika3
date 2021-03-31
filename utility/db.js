@@ -1,7 +1,7 @@
 let Fs = require("fs");
 
 function unmute(guild, user, role){
-	guild = Bot.guilds.get(guild);
+	guild = Bot.guilds.cache.get(guild);
 	if(!guild)
 		return;
 	user = guild.members.get(user);
@@ -17,7 +17,7 @@ let checkUserMute = module.exports.checkUserMute = function(guildId, userId){
 	let mute = Configs.get(guildId).get("mutes").get(userId);
 	if(!mute.start)
 		return;
-	let member = Bot.guilds.get(guildId).members.get(userId),
+	let member = Bot.guilds.cache.get(guildId).members.get(userId),
 		timeSince = ((new Date()).getTime() - mute.start) / 1000;
 	if(timeSince >= mute.time){
 		unmute(guildId, userId, mute.role);

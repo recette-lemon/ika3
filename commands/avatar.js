@@ -19,7 +19,7 @@ function func(message, args){
 		aviurl = aviurl.replace(/\png|jpg/, "gif");
 	if(!aviurl.includes("?size="))
 		aviurl += "?size=2048";
-	let embed = new Discord.RichEmbed({
+	let embed = new Discord.MessageEmbed({
 		color: Config.embedColour,
 		image: {
 			url: aviurl

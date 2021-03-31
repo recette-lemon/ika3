@@ -40,7 +40,7 @@ function duckduckgo(message, string, args){
 			if(!results[0])
 				return message.reply("Nothing found.");
 
-			let embed = new Discord.RichEmbed({
+			let embed = new Discord.MessageEmbed({
 				title: results[0].title,
 				author: {
 					name: results[0].url.split("/")[2],
@@ -105,7 +105,7 @@ function startpage(message, string, args){
 			return message.reply("No results.");
 		results = results.map(JSON.parse);
 
-		let embed = new Discord.RichEmbed({
+		let embed = new Discord.MessageEmbed({
 			title: HTMLParse(results[0].title).text,
 			author: {
 				name: results[0].displayUrl.split("/")[2],

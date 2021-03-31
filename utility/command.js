@@ -98,7 +98,7 @@ function getFlagString(arg, k){
 }
 
 function getHelpEmbed(cmd){
-	let embed = new Discord.RichEmbed({
+	let embed = new Discord.MessageEmbed({
 		title: cmd.name+" ["+cmd.category+"]",
 		description: cmd.description,
 		color: Config.embedColour
@@ -123,7 +123,7 @@ function getHelpEmbed(cmd){
 	return embed;
 }
 
-let errorEmbed = new Discord.RichEmbed({
+let errorEmbed = new Discord.MessageEmbed({
 	title: "Whoops, got an error...",
 	description: "Either you did the inputs wrong, or its just a feature.\nTry appending --help for help.",
 	color: Config.embedColour,
@@ -197,7 +197,7 @@ module.exports.imageCommand = function(message, args, folder){
 		ext = file.split(".").pop(),
 		name = folder+"-"+(n+1)+"."+ext;
 
-	let embed = isImageExt(ext) ? new Discord.RichEmbed({
+	let embed = isImageExt(ext) ? new Discord.MessageEmbed({
 		color: Config.embedColour,
 		image: {url: "attachment://"+name},
 		footer: {
@@ -220,10 +220,10 @@ module.exports.getUser = function(message, args){
 	let a = args._.join(" ");
 	if(isNaN(a)){
 		if(a.includes("#"))
-			return Bot.users.find((u) => u.tag == a);
-		return Bot.users.find((u) => u.username == a);
+			return Bot.users.cache.find((u) => u.tag == a);
+		return Bot.users.cache.find((u) => u.username == a);
 	}
-	return Bot.users.get(args._[0]);
+	return Bot.users.cache.get(args._[0]);
 };
 
 let mimes = {

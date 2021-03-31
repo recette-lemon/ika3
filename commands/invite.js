@@ -9,7 +9,7 @@ module.exports = {
 
 function func(message){
 
-	let embed = new Discord.RichEmbed({
+	let embed = new Discord.MessageEmbed({
 		thumbnail: {
 			url: Bot.user.avatarURL
 		},

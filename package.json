@@ -23,7 +23,7 @@
   },
   "homepage": "https://gitlab.com/recette_lemonweed/ika3",
   "dependencies": {
-    "discord.js": "^11.6.3",
+    "discord.js": "^12.0.0",
     "minimist": "https://github.com/recette-lemon/minimist-without-numbers",
     "node-html-parser": "^1.2.16",
     "request": "^2.88.2",
