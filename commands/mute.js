@@ -44,7 +44,7 @@ function func(message, args){
 	let guildConfig = Configs.get(message.guild.id);
 	let user = message.mentions.members.first();
 	let time = args._[0] ? Utility.clamp(parseTime((args._[0][0] === "<" ? args._[1]:args._[0]) || 600), 604800, 0) : null;
-	let role = message.guild.roles.get(guildConfig.get("muterole"));
+	let role = message.guild.roles.cache.get(guildConfig.get("muterole"));
 
 	// remaining output block
 	if(args.remaining){

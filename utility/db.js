@@ -7,7 +7,7 @@ function unmute(guild, user, role){
 	user = guild.members.get(user);
 	if(!user)
 		return;
-	role = guild.roles.get(role);
+	role = guild.roles.cache.get(role);
 	if(!role)
 		return;
 	user.removeRole(role);

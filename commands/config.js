@@ -15,7 +15,7 @@ module.exports = {
 };
 
 function assignMuteRole(id, message, args, str){
-	let role = message.guild.roles.get(str);
+	let role = message.guild.roles.cache.get(str);
 	if(!role){
 		str = str.toLowerCase();
 		role = message.guild.roles.find(role => {
