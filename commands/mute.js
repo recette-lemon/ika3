@@ -27,7 +27,7 @@ function parseTime(str){
 }
 
 function unmute(user, role, mutes){
-	user.removeRole(role).catch();
+	user.roles.remove(role).catch();
 	mutes.delete(user.id);
 }
 
@@ -76,7 +76,7 @@ function func(message, args){
 		return message.reply("Need a mention and length, in that order, and a valid role id/name set.");
 
 	// check heirarchy
-	if(user.highestRole.comparePositionTo(message.member.highestRole) >= 0)
+	if(user.roles.highest.comparePositionTo(message.member.roles.highest) >= 0)
 		return message.reply("You arent higher than them in the role list.");
 
 	if(args.unmute){
@@ -92,7 +92,7 @@ function func(message, args){
 	});
 
 	// mute and set up timeout
-	user.addRole(role).then(() => {
+	user.roles.add(role).then(() => {
 		message.reply("User muted for " + Utility.toHHMMSS(time));
 		setTimeout(() => {
 			unmute(user, role, guildConfig.get("mutes"));

@@ -10,7 +10,7 @@ function unmute(guild, user, role){
 	role = guild.roles.cache.get(role);
 	if(!role)
 		return;
-	user.removeRole(role);
+	user.roles.remove(role);
 }
 
 let checkUserMute = module.exports.checkUserMute = function(guildId, userId){
@@ -25,7 +25,7 @@ let checkUserMute = module.exports.checkUserMute = function(guildId, userId){
 		return;
 	}
 	if(!member.roles.has(mute.role))
-		member.addRole(mute.role).catch();
+		member.roles.add(mute.role).catch();
 	console.log("unmuting", member.user.username, "in", (mute.time - timeSince));
 	setTimeout(() => {
 		unmute(guildId, userId, mute.role);

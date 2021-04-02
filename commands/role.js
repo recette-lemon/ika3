@@ -43,7 +43,7 @@ function func(message, args){
 		return message.reply("Role is not self assignable.");
 
 	let has = message.member.roles.has(role.id);
-	(has ? message.member.removeRole(role) : message.member.addRole(role)).then(() => {
+	(has ? message.member.roles.remove(role) : message.member.roles.add(role)).then(() => {
 		message.reply(has ? "Removed." : "Added.");
 	}).catch(() => {
 		message.reply("Couldn't change roles. Might lack permissions.");
