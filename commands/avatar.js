@@ -14,11 +14,11 @@ module.exports = {
 
 function func(message, args){
 	let user = Utility.getUser(message, args) || message.author;
-	let aviurl = (args.server ? message.guild.iconURL : user.avatarURL || user.defaultAvatarURL);
+	let aviurl = (args.server ? message.guild.iconURL({format: 'png', dynamic: true}) : user.displayAvatarURL({format: 'png', dynamic: true}));
 	if(aviurl.includes("a_"))
 		aviurl = aviurl.replace(/\png|jpg/, "gif");
 	if(!aviurl.includes("?size="))
-		aviurl += "?size=2048";
+		aviurl += "?size=4096";
 	let embed = new Discord.MessageEmbed({
 		color: Config.embedColour,
 		image: {
