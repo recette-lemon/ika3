@@ -151,7 +151,7 @@ let MessageControls = module.exports.MessageControls = class MessageControls ext
 				r.n = emojis.indexOf(r.emoji.name);
 				this.emit(r.emoji.name, r);
 				this.emit("reaction", r);
-				r.remove(user);
+				r.users.remove(user);
 			});
 			collector.on('end', () => message.clearReactions());
 		});
