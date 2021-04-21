@@ -180,7 +180,8 @@ module.exports.scrollControls = function(mes, arr, func){
 
 module.exports.imageCommandArguments = {
 	flags: {
-		extension: ["", "ext", "e"]
+		extension: ["", "ext", "e"],
+		extension: ["", "regex", "r"]
 	}
 };
 module.exports.imageCommand = function(message, args, folder){
@@ -190,6 +191,11 @@ module.exports.imageCommand = function(message, args, folder){
 		imgs = imgs.filter(i => i.endsWith("."+args.ext));
 		if(imgs.length === 0)
 			return message.reply("No files with that ext.");
+	}
+	if(args.regex){
+		imgs = imgs.filter(i => i.match(args.regex));
+		if(imgs.length === 0)
+			return message.reply("No files with that regex.");
 	}
 
 	let n = Math.floor(Math.random() * imgs.length),
@@ -201,7 +207,7 @@ module.exports.imageCommand = function(message, args, folder){
 		color: Config.embedColour,
 		image: {url: "attachment://"+name},
 		footer: {
-			text: "#"+(n+1)+" of "+Images[folder].length
+			text: "#"+(n+1)+" of "+imgs.length
 		}
 	}) : null;
 
