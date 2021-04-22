@@ -257,7 +257,7 @@ function parseMessageForImages(message, includeVid){
 }
 
 module.exports.getImage = function(message, includeVid){
-	for(let mes of message.channel.messages.array().reverse()){
+	for(let mes of message.channel.messages.cache.array().reverse()){
 		res = parseMessageForImages(mes, includeVid);
 		if(res[0])
 			return res;
