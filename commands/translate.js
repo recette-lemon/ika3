@@ -11,7 +11,8 @@ module.exports = {
 			plain: [false, "p"],
 			backend: {
 				google: [false, "g"],
-				yandex: [false, "y"]
+				yandex: [false, "y"],
+				libre: [false, "l"]
 			}
 		}
 	},
@@ -64,6 +65,25 @@ let backends = {
 				return message.reply("Problem parsing response");
 			console.log(capture)
 		});
+	},
+	libre: (message, text, from, to) => {
+		let request = require("request");
+		request.post({
+			url: "https://translate.mentality.rip/translate",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({
+				q: text,
+				source: from,
+				target: to
+			})
+		}, (err, res, bod) => {
+			if(err || !bod)
+				return message.reply("Error.");
+			let obj = JSON.parse(bod);
+			if(!obj.translatedText)
+				return message.reply("Error.");
+			return message.reply(obj.translatedText);
+		});
 	}
 }
 
@@ -72,6 +92,7 @@ function func(message, args){
 	let from = codes[args.from] || args.from;
 	let to = codes[args.to] || args.to;
 
-	let backend = args.google ? backends.google : backends.yandex;
+	let backend = args.yandex ? backends.yandex : (args.google ? backends.google : backends.libre);
+	console.log(backend);
 	backend(message, text, from, to);
 }
